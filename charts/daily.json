@@ -1,0 +1,126 @@
+{
+    "seriesdata": {
+        "type": "line",
+        "chartdata": []
+    },
+    "metadata": {
+        "axes": {
+            "x": [0],
+            "y": [[1]],
+            "tooltip": [0, "<b style='color:{{clr}}'>{{val(2)}}: {{val(1)}}</b>"],
+            "clr": [2]
+        },
+        "columns": [
+            {
+                "dataindex": 0,
+                "columnname": "Date",
+                "datatype": "time",
+                "time": {
+                    "subfunction": "ABSDAY",
+                    "inputformat": "DD MM YYYY",
+                    "format": {
+                        "specifier": "dd MMM YYYY"
+                    }
+                },
+                "columnindex": 0
+            },
+            {
+                "dataindex": 1,
+                "columnname": "Total",
+                "datatype": "numeric",
+                "numeric": {
+                    "axisformat": {
+                        "type": "SIprefix"
+                    }
+                }
+            },
+            {
+                "columnname": "Total"
+            }
+        ]
+    },
+    "chart": {
+        "marginRight": 20,
+        "axes": {
+            "xaxis": {
+                "label": {
+                    "text": ""
+                },
+                "ticklabel": {
+                    "alignMode": "rotate(90)"
+                },
+                "axisline": {
+                    "show": false
+                },
+                "grid": {
+                    "color": "#F5F5F5",
+                    "show": true,
+                    "strokeWidth": 1
+                }
+            },
+            "yaxis": [
+                {
+                    "label": {
+                        "text": ""
+                    },
+                    "axisline": {
+                        "show": false
+                    },
+                    "grid": {
+                        "color": "#F5F5F5",
+                        "show": true,
+                        "strokeWidth": 1
+                    },
+                    "padding": 5,
+                    "logBase": 10,
+                    "outerPadding": 0
+                }
+            ]
+        },
+        "plot": {
+            "plotoptions": {
+                "line": {
+                    "stacked": {
+                        "enabled": false,
+                        "outerPadding": 0
+                    },
+                    "marker": {
+                        "size": 1
+                    },
+                    "outerPadding": 0,
+                    "animation": {
+                        "easingType": "cubic-in-out",
+                        "type": "fade"
+                    }
+                },
+                "scatter": {
+                    "animation": {
+                        "easingType": "cubic-in-out",
+                        "type": "fade"
+                    },
+                    "marker": {
+                        "innerFillColor": "transparent",
+                        "innerStrokeWidth": 0,
+                        "outerFillColor": null
+                    }
+                }
+            }
+        }
+    },
+    "legend": {
+        "colors": ["#EF5350", "#ff9800", "#26A69A", "#B0BEC5"]
+    },
+    "canvas": {
+        "theme": "covid_theme",
+        "title": {
+            "text": "Daily Trend"
+        }
+    },
+    "tooltip": {
+        "sharedSeriesInfo": true,
+        "crosshair": {
+            "type": "xy",
+            "color": "#d0d0d0"
+        }
+    }
+}
