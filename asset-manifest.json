@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/covid19-india/static/css/main.25d3de67.chunk.css",
-    "main.js": "/covid19-india/static/js/main.2c08197f.chunk.js",
-    "main.js.map": "/covid19-india/static/js/main.2c08197f.chunk.js.map",
-    "runtime-main.js": "/covid19-india/static/js/runtime-main.c1cc85d0.js",
-    "runtime-main.js.map": "/covid19-india/static/js/runtime-main.c1cc85d0.js.map",
-    "static/js/2.cf9a7c0b.chunk.js": "/covid19-india/static/js/2.cf9a7c0b.chunk.js",
-    "static/js/2.cf9a7c0b.chunk.js.map": "/covid19-india/static/js/2.cf9a7c0b.chunk.js.map",
-    "index.html": "/covid19-india/index.html",
-    "precache-manifest.c43e5221f3a11ade085b1a62386e7d54.js": "/covid19-india/precache-manifest.c43e5221f3a11ade085b1a62386e7d54.js",
-    "service-worker.js": "/covid19-india/service-worker.js",
-    "static/css/main.25d3de67.chunk.css.map": "/covid19-india/static/css/main.25d3de67.chunk.css.map",
-    "static/js/2.cf9a7c0b.chunk.js.LICENSE.txt": "/covid19-india/static/js/2.cf9a7c0b.chunk.js.LICENSE.txt"
+    "main.css": "/static/css/main.25d3de67.chunk.css",
+    "main.js": "/static/js/main.797beb3d.chunk.js",
+    "main.js.map": "/static/js/main.797beb3d.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.4e7aff86.js",
+    "runtime-main.js.map": "/static/js/runtime-main.4e7aff86.js.map",
+    "static/js/2.cf9a7c0b.chunk.js": "/static/js/2.cf9a7c0b.chunk.js",
+    "static/js/2.cf9a7c0b.chunk.js.map": "/static/js/2.cf9a7c0b.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.ccacb068ca8e705ddbe1d7cda5dd7566.js": "/precache-manifest.ccacb068ca8e705ddbe1d7cda5dd7566.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.25d3de67.chunk.css.map": "/static/css/main.25d3de67.chunk.css.map",
+    "static/js/2.cf9a7c0b.chunk.js.LICENSE.txt": "/static/js/2.cf9a7c0b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.c1cc85d0.js",
+    "static/js/runtime-main.4e7aff86.js",
     "static/js/2.cf9a7c0b.chunk.js",
     "static/css/main.25d3de67.chunk.css",
-    "static/js/main.2c08197f.chunk.js"
+    "static/js/main.797beb3d.chunk.js"
   ]
 }
