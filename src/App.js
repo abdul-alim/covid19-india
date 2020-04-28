@@ -40,7 +40,7 @@ function App() {
 
     return (
         <div className="App">
-            <Router>
+            <Router basename={process.env.PUBLIC_URL}>
                 <Route
                     render={({location}) => (
                         <div className="Almighty-Router">
