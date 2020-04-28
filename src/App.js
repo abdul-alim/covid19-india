@@ -1,7 +1,6 @@
 import React from 'react';
-import {AnimatedSwitch} from 'react-router-transition';
 import {
-    BrowserRouter as Router,
+    BrowserRouter,
     Route,
     Redirect,
     Switch,
@@ -40,7 +39,7 @@ function App() {
 
     return (
         <div className="App">
-            <Router basename={process.env.PUBLIC_URL}>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <Route
                     render={({location}) => (
                         <div className="Almighty-Router">
@@ -68,7 +67,7 @@ function App() {
                         </div>
                     )}
                 />
-            </Router>
+            </BrowserRouter>
         </div>
     );
 }
