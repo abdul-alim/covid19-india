@@ -1,0 +1,93 @@
+{
+    "seriesdata": {
+        "type": "bar",
+        "chartdata": []
+    },
+    "metadata": {
+        "axes": {
+            "x": [0],
+            "y": [[1]],
+            "tooltip": [0, "{{val(2)}}: {{val(1)}}"],
+            "clr": [2]
+        },
+        "columns": [
+            {
+                "dataindex": 0,
+                "columnname": "State/UT",
+                "datatype": "ordinal",
+                "columnindex": 0
+            },
+            {
+                "dataindex": 1,
+                "columnname": "Total",
+                "datatype": "numeric"
+            },
+            {
+                "columnname": "Total"
+            }
+        ]
+    },
+    "chart": {
+        "axes": {
+            "rotated": false,
+            "xaxis": {
+                "label": {
+                    "text": ""
+                },
+                "ticklabel": {
+                    "alignMode": "rotate",
+                    "marginLeft": 0,
+                    "marginTop": 1,
+                    "marginBottom": 1,
+                    "marginRight": 0
+                },
+                "axisline": {
+                    "show": false
+                },
+                "grid": {
+                    "color": "#F5F5F5",
+                    "show": true,
+                    "strokeWidth": 1
+                }
+            },
+            "yaxis": [
+                {
+                    "label": {
+                        "text": ""
+                    },
+                    "axisline": {
+                        "show": false
+                    },
+                    "grid": {
+                        "color": "#F5F5F5",
+                        "show": true,
+                        "strokeWidth": 1
+                    }
+                }
+            ]
+        },
+        "plot": {
+            "plotoptions": {
+                "bar": {
+                    "stacked": {
+                        "enabled": true,
+                        "outerPadding": 0
+                    },
+                    "outerPadding": 0
+                }
+            }
+        }
+    },
+    "legend": {
+        "fontSize": 12,
+        "enabled": true,
+        "colors": ["#EF5350", "#26A69A", "#B0BEC5"],
+        "marginTop": -10
+    },
+    "canvas": {
+        "theme": "covid_theme",
+        "title": {
+            "text": "Affected State and Union Territories"
+        }
+    }
+}

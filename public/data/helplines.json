@@ -1,0 +1,76 @@
+{
+    "Central Helplines": [
+        {"name": "National Helpline Number", "type": "phone", "number": "1075"},
+        {
+            "name": "Central Helpline Number",
+            "type": "phone",
+            "number": "+91-11-23978046"
+        },
+        {
+            "name": "MyGov WhatsApp Number",
+            "type": "whatsapp",
+            "number": "+91-90131-51515"
+        },
+        {
+            "name": "Central Helpline Email",
+            "type": "email",
+            "number": "ncov2019@gov.in"
+        }
+    ],
+    "State Helplines": [
+        {"name": "Andhra Pradesh", "type": "phone", "number": "8662410978"},
+        {"name": "Arunachal Pradesh", "type": "phone", "number": "9436055743"},
+        {"name": "Assam", "type": "phone", "number": "6913347770"},
+        {"name": "Bihar", "type": "phone", "number": "104"},
+        {"name": "Chhattisgarh", "type": "phone", "number": "104"},
+        {"name": "Goa", "type": "phone", "number": "104"},
+        {"name": "Gujarat", "type": "phone", "number": "104"},
+        {"name": "Haryana", "type": "phone", "number": "8558893911"},
+        {"name": "Himachal Pradesh", "type": "phone", "number": "104"},
+        {"name": "Jharkhand", "type": "phone", "number": "104"},
+        {"name": "Karnataka", "type": "phone", "number": "104"},
+        {"name": "Kerala", "type": "phone", "number": "0471-2552056"},
+        {"name": "Madhya Pradesh", "type": "phone", "number": "104"},
+        {"name": "Maharashtra", "type": "phone", "number": "020-26127394"},
+        {"name": "Manipur", "type": "phone", "number": "3852411668"},
+        {"name": "Meghalaya", "type": "phone", "number": "108"},
+        {"name": "Mizoram", "type": "phone", "number": "102"},
+        {"name": "Nagaland", "type": "phone", "number": "7005539653"},
+        {"name": "Odisha", "type": "phone", "number": "9439994859"},
+        {"name": "Punjab", "type": "phone", "number": "104"},
+        {"name": "Rajasthan", "type": "phone", "number": "0141-2225624"},
+        {"name": "Sikkim", "type": "phone", "number": "104"},
+        {"name": "Tamil Nadu", "type": "phone", "number": "044-29510500"},
+        {"name": "Telangana", "type": "phone", "number": "104"},
+        {"name": "Tripura", "type": "phone", "number": "0381-2315879"},
+        {"name": "Uttarakhand", "type": "phone", "number": "104"},
+        {"name": "Uttar Pradesh", "type": "phone", "number": "18001805145"},
+        {
+            "name": "West Bengal",
+            "type": "phone",
+            "number": ["1800313444222", "03323412600"]
+        }
+    ],
+    "Union territories Helplines": [
+        {
+            "name": "Andaman and NicobarIslands",
+            "type": "phone",
+            "number": "03192-232102"
+        },
+        {"name": "Chandigarh", "type": "phone", "number": "9779558282"},
+        {"name": "Delhi", "type": "phone", "number": "011-22307145"},
+        {
+            "name": "Jammu & Kashmir",
+            "type": "phone",
+            "number": ["01912520982", "0194-2440283"]
+        },
+        {"name": "Ladakh", "type": "phone", "number": "01982256462"},
+        {"name": "Lakshadweep", "type": "phone", "number": "104"},
+        {"name": "Puducherry", "type": "phone", "number": "104"},
+        {
+            "name": "Dadra and Nagar Haveli and Daman & Diu",
+            "type": "phone",
+            "number": "104"
+        }
+    ]
+}

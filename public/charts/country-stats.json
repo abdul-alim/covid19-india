@@ -1,0 +1,73 @@
+{
+    "legend": {
+        "colors": ["#3F51B5", "#9071cd"]
+    },
+    "chart": {
+        "effects": {
+            "choice": "dropShadow",
+            "options": {
+                "dropShadow": {
+                    "blur": 10,
+                    "color": "rgba(194,191,191,0.6)",
+                    "dy": 10,
+                    "dx": -10
+                }
+            }
+        },
+        "plot": {
+            "plotoptions": {
+                "pie": {
+                    "datalabels": {
+                        "show": true,
+                        "showAs": [
+                            "<tspan style='font-weight: bold'>{{val(0)}}</tspan>: {{val(1)}}",
+                            "<tspan style='font-weight: bold;'>Percentage</tspan>: {{per(1)}}"
+                        ],
+                        "fontColor": null
+                    },
+                    "padAngle": 0.02,
+                    "innerRadius": "50%",
+                    "outerPadding": 20,
+                    "cornerRadius": 5,
+                    "animation": {
+                        "easingType": "back-out",
+                        "type": "inner"
+                    },
+                    "strokeColor": null
+                }
+            }
+        }
+    },
+    "metadata": {
+        "axes": {
+            "x": [0],
+            "y": [[1]],
+            "clr": [2],
+            "tooltip": ["{{val(0)}}", "Percentage : {{per(1)}}"]
+        },
+        "columns": [
+            {
+                "dataindex": 0,
+                "columnname": "dsda",
+                "datatype": "ordinal"
+            },
+            {
+                "dataindex": 1,
+                "columnname": "Sum(Sales)",
+                "datatype": "numeric"
+            },
+            {
+                "columnname": "clr"
+            }
+        ]
+    },
+    "seriesdata": {
+        "chartdata": []
+    },
+    "canvas": {
+        "title": {
+            "text": "Confirmed Cases by Nationalities"
+        },
+        "theme": "covid_theme"
+    }
+}

@@ -1,0 +1,152 @@
+{
+    "canvas": {
+        "fontSize": 14,
+        "title": {
+            "show": false,
+            "text": "Affected State and Union Territories"
+        },
+        "theme": "covid_theme"
+    },
+    "seriesdata": {
+        "chartdata": [
+            {
+                "type": "geoheatmap",
+                "data": []
+            }
+        ]
+    },
+    "metadata": {
+        "axes": {
+            "x": [
+                2
+            ],
+            "y": [
+                [
+                    1
+                ]
+            ],
+            "z": [1],
+            "geo": [
+                0
+            ],
+            "clr": [
+                1
+            ],
+            "tooltip": [
+                "<b>{{col(0)}}</b>: {{val(0)}}",
+                "<b>{{col(1)}}</b>: <span class='text-red-600'>{{val(1)}}</span>",
+                "<b>{{col(4)}}</b>: <span class='text-red-600'>{{val(4)}}</span>",
+                "<b>{{col(5)}}</b>:<span class='text-red-600'>{{val(5)}}</span>",
+                "<b>{{col(2)}}</b>: <span class='text-green-600'>{{val(2)}}</span>",
+                "<b>{{col(3)}}</b>: <span class='text-gray-600'>{{val(3)}}</span>"
+            ]
+        },
+        "columns": [
+            {
+                "dataindex": 0,
+                "columnname": "State",
+                "datatype": "geo",
+                "joinBy": "name_ascii",
+                "geo": {
+                    "format": {
+                        "mapBy": "name_ascii"
+                    }
+                }
+            },
+            {
+                "dataindex": 1,
+                "columnname": "Total Infected",
+                "datatype": "numeric"
+            },
+            {
+                "dataindex": 2,
+                "columnname": "Recovered",
+                "datatype": "ordinal"
+            },
+            {
+                "dataindex": 3,
+                "columnname": "Dead",
+                "datatype": "ordinal"
+            },
+            {
+                "dataindex": 4,
+                "columnname": "Indian Nationals",
+                "datatype": "ordinal"
+            },
+            {
+                "dataindex": 5,
+                "columnname": "Foreign Nationals",
+                "datatype": "ordinal"
+            }
+        ]
+    },
+    "map": {
+        "scope": "countries-ind-1-india",
+        "strokeColor": "rgb(251, 237, 234)",
+        "fillColor": "rgb(251, 237, 234)",
+        "renderingMode": "canvas"
+    },
+    "chart": {
+        "zoom": {
+            "enabled": false
+        },
+        "marginTop": 0,
+        "marginRight": 0,
+        "marginBottom": 0,
+        "marginLeft": 0,
+        "plot": {
+            "plotoptions": {
+                "geoheatmap": {
+                    "strokeColor": "#E57373",
+                    "strokeWidth": 0.5,
+                    "legendHighlightEffect": {
+                        "selectedSeries": "none"
+                    },
+                    "hoveroptions": {
+                        "strokeWidth": 2
+                    },
+                    "datalabels": {
+                        "show": false,
+                        "fontSize": 10
+                    }
+                },
+                "geoscatter": {
+                    "marker": {
+                        "symbol": "geo-location-1",
+                        "size": 3,
+                        "outerFillColor": "#e84b36",
+                        "innerFillColor": "white",
+                        "outerStrokeWidth": 1,
+                        "outerStrokeColor": "rgb(251, 237, 234)"
+                    },
+                    "hoveroptions": {
+                        "outerFillColor": "white",
+                        "outerStrokeWidth": 2,
+                        "innerFillColor": "#e84b36",
+                        "outerStrokeColor": "#e84b36"
+                    },
+                    "animation": {
+                        "type": "sizing",
+                        "duration": 500
+                    },
+                    "datalabels": {
+                        "show": false
+                    }
+                }
+            }
+        }
+    },
+    "legend": {
+        "enabled": true,
+        "colors": ["white", "red"],
+        "colorBand": {
+            "minRange": 0
+        },
+        "filter": {
+            "enabled": false
+        }
+    },
+    "tooltip": {
+        "enabled": false
+    }
+}

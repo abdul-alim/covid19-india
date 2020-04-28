@@ -1,0 +1,26 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2019,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "extends": ["plugin:react/recommended", "google", "prettier", "prettier/react"],
+    "plugins": ["prettier"],
+    "rules": {
+        "prettier/prettier": "error",
+        "curly": "error",
+        "dot-notation": "error",
+        "prefer-template": "error",
+        "no-console": "error",
+        "no-case-declarations": "error",
+        "no-empty": "error",
+        "comma-dangle": "error"
+    }
+}
