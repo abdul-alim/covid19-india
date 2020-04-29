@@ -11,6 +11,7 @@ import Home from './components/home';
 import Helpline from './components/helplines';
 import State from './components/state';
 import './styles/styles.css';
+import ScrollToTop from "./utils/scroll-top";
 
 function App() {
     const pages = [
@@ -40,6 +41,7 @@ function App() {
     return (
         <div className="App">
             <BrowserRouter basename={process.env.PUBLIC_URL}>
+                <ScrollToTop />
                 <Route
                     render={({location}) => (
                         <div className="Almighty-Router">

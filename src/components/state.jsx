@@ -5,7 +5,8 @@ import Table from './table';
 import Map from './Map';
 import {Link, useParams, useHistory} from 'react-router-dom';
 import {STATE_CODES} from '../constants/state-code';
-import {POPULATION} from '../constants/population.js';
+import {POPULATION, PUPULATION_SOURCE} from '../constants/population.js';
+import {getFormattedTestingData} from '../utils/format-test';
 
 const d3 = window.d3;
 
@@ -85,22 +86,35 @@ function State({}) {
 
             let state_population = POPULATION[stateCode];
 
-            let testingData = {
-                tested: testing_data.tested.toLocaleString(),
-                date: formatTime(parseTime(testing_data.date)),
-                population: state_population.toLocaleString(),
-                test_per_million: Math.round(
-                    (testing_data.tested / state_population) * 1000000
-                ).toLocaleString(),
-            };
-
+            let testingData = getFormattedTestingData(
+                testing_data,
+                state_population,
+                districtInfo.state
+            );
             setTestingData(testingData);
+
+            // let testingData = {
+            //     tested: testing_data.tested.toLocaleString(),
+            //     date: formatTime(parseTime(testing_data.date)),
+            //     population: state_population.toLocaleString(),
+            //     test_per_million: Math.round(
+            //         (testing_data.tested / state_population) * 1000000
+            //     ).toLocaleString(),
+            // };
 
             setDisplayCards(getCards(stateInfo, stateInfo.today));
 
             setDistrictData(districtInfo.districts);
 
-            setMapInitData({});
+            let mapInitData = {
+                confirmed: districtInfo.confirmed,
+                active: districtInfo.active,
+                recovered: districtInfo.recovered,
+                dead: districtInfo.dead,
+                name: districtInfo.state,
+                today: districtInfo.today,
+            };
+            setMapInitData(mapInitData);
 
             setTableData({
                 rows: districtInfo.districts,
@@ -197,17 +211,29 @@ function State({}) {
                     <div className="sticky">
                         <div className="flex justify-between fade-in anim-delay-2">
                             <div className="text-blue-600 items-center justify-center p-2">
-                                <div className="text-xs py-1">Tested</div>
+                                <div className="text-xs py-1">
+                                    Tested{' '}
+                                    <span className="font-bold">
+                                        {testingData.label}
+                                    </span>
+                                </div>
                                 <div className="text-xl font-bold">
                                     {testingData.tested}
                                 </div>
-                                <div className="text-xs">
-                                    As of {testingData.date} as per{' '}
-                                    <span className="bg-blue-100">source</span>
-                                </div>
+                                {testingData.date}
                             </div>
                             <div className="text-blue-600 items-center justify-center text-right p-2">
-                                <div className="text-xs py-1">Population</div>
+                                <div className="text-xs py-1">
+                                    Population{' '}
+                                    <a
+                                        rel="noopener"
+                                        target="_blank"
+                                        className="bg-blue-100"
+                                        href={PUPULATION_SOURCE}
+                                    >
+                                        2019
+                                    </a>
+                                </div>
                                 <div className="text-sm font-bold">
                                     {testingData.population}
                                 </div>
@@ -226,10 +252,16 @@ function State({}) {
                         >
                             {fetched && (
                                 <Map
-                                    init={mapInitData}
+                                    initCardData={mapInitData}
                                     stateCode={stateCode}
                                     seriesPoints={districtData}
                                     joinBy={'district'}
+                                    cards={[
+                                        'confirmed',
+                                        'active',
+                                        'recovered',
+                                        'dead',
+                                    ]}
                                 />
                             )}
                         </div>

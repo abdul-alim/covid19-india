@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
+
 import {ascending, descending} from '../utils/sort';
 import Arrow from './arrow';
 
@@ -42,7 +44,7 @@ function Table(props) {
                 <tr>
                     {columns.map((column) => (
                         <th
-                            className="capitalize border px-2 py-2 sort-by"
+                            className="capitalize border px-2 py-2 sort-by sticky bg-white"
                             key={column.name}
                             onClick={sortRows}
                             data-prop={column.accessor}
@@ -69,6 +71,15 @@ function Table(props) {
 
                             if (row.district === 'Unknown') {
                                 extraClass = `bg-${colorClass}-200 text-${colorClass}-600`;
+                            }
+
+                            //
+                            if (props.link && j === 0) {
+                                count = (
+                                    <Link to={`/state/${row.stateCode}`}>
+                                        {count}
+                                    </Link>
+                                );
                             }
 
                             return (

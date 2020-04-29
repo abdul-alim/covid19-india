@@ -1110,7 +1110,7 @@ img {
     }
 
     .md\:w-40 {
-        width: 40%;
+        width: 34rem;
     }
 
     .md\:px-6 {
@@ -1118,10 +1118,11 @@ img {
         padding-right: 1.5rem;
     }
 
-    .md\:mx-6 {
-        margin-left: 1.5rem;
-        margin-right: 1.5rem;
+    .md\:mx-10 {
+        margin-left: 2.5rem;
+        margin-right: 2.5rem;
     }
+
 
     .md\:w-60{
         width: 60%;
@@ -1296,7 +1297,8 @@ main.container {
 
 @media (min-width: 1024px) {
     .live-map {
-        height: 500px;
+        height: 550px;
+        height: 550px;
     }
 
     .wordcloud-chart,

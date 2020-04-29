@@ -57,7 +57,7 @@ const DisplayCard = forwardRef(({count, cards: cc, styles = {}}, ref) => {
                         <div
                             className={`py-2 w-full ${bg200} text-sm font-semibold`}
                         >
-                            <span className="">{card.name}</span>
+                            <span className="capitalize">{card.name}</span>
                         </div>
                     </div>
                 );

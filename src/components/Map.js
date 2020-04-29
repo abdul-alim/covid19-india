@@ -52,31 +52,36 @@ class Map extends React.Component {
             this.myDiv.classList.add('fade-in');
             mapData.map.scope = scopeCode;
             mapData.seriesdata.chartdata[0].data = [seriesPoints];
-            
-            let last = null;
+
+            let last = null,
+                {callback} = this.props;
 
             mapData.chart.plot.plotoptions.geoheatmap.events = {
                 mousemove: (error, data) => {
-                    let [name, infected, active, recovered, dead] = data.point,
+                    let [name, confirmed, active, recovered, dead] = data.point,
                         today = {recovered: 0, infected: 0, active: 0, dead: 0};
 
                     if (object_map[name]) {
                         today = object_map[name].today;
                     }
-                    
+
+                    let data_callback = {
+                        name,
+                        confirmed,
+                        active,
+                        recovered,
+                        dead,
+                    };
+
                     if (name !== last) {
-                        this.handleMapHover(
-                            {
-                                name,
-                                infected,
-                                active,
-                                recovered,
-                                dead,
-                            },
-                            today
-                        );
+                        this.handleMapHover(data_callback, today);
                         last = name;
                     }
+
+                    if (callback) {
+                        callback(data_callback, today);
+                    }
+
                     window.d3.event.allowDefault = true;
                 },
             };
@@ -88,7 +93,11 @@ class Map extends React.Component {
     render() {
         return (
             <div>
-                <MapText ref={this.child} init={this.props.init} />
+                <MapText
+                    ref={this.child}
+                    initCardData={this.props.initCardData}
+                    cards={this.props.cards}
+                />
                 <div
                     className="live-map my-6"
                     ref={(c) => (this.myDiv = c)}

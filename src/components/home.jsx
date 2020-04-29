@@ -5,12 +5,18 @@ import Table from './table';
 import Map from './Map';
 import {Link} from 'react-router-dom';
 import {groupBy} from '../utils/common-utils';
+import {POPULATION, PUPULATION_SOURCE} from '../constants/population';
+import { getFormattedTestingData } from "../utils/format-test";
+const d3 = window.d3;
+let isMobileScreen = window.innerWidth < 769;
 
 function Home({}) {
     const [fetched, setFetched] = useState(false);
     const [data, setData] = useState({});
     const [tableData, setTableData] = useState({rows: [], columns: []});
     const [mapInitData, setMapInitData] = useState({});
+    const [testingData, setTestingData] = useState({});
+    const [stateDataMapped, setStateDataMapped] = useState({});
 
     const childRef = useRef();
 
@@ -18,14 +24,14 @@ function Home({}) {
         return [
             {
                 name: 'Confirmed',
-                value: total.infected,
-                delta: today.infected,
+                value: total.confirmed,
+                delta: today.confirmed,
                 colorClass: 'red',
             },
             {
                 name: 'Active',
-                value: total.infected - total.recovered - total.dead,
-                delta: today.infected - today.recovered - today.dead,
+                value: total.active,
+                delta: today.active,
                 colorClass: 'orange',
             },
             {
@@ -55,69 +61,65 @@ function Home({}) {
     const getData = async () => {
         try {
             let [{data: reports}] = await Promise.all([
-                axios.get('/data/trend_v2.json')
+                axios.get('/data/trend_v2.json'),
             ]);
 
-            
-            console.log(reports);
-            
             setData(reports);
 
-            setDisplayCards(getCards(reports.total, reports.trend.today));
-            // set active count
-            // reports.states = reports.states.filter((row) => row.infected > 0);
-            //
-            // // let seriesPoints = [];
-            // // reports.states.forEach((row) => {
-            // //     // data mapped
-            // //
-            // //     row.active = row.infected - row.recovered - row.dead;
-            // //     row.today.active =
-            // //         row.today.infected - row.today.recovered - row.today.dead;
-            // //
-            // //     seriesPoints.push([
-            // //         row.state,
-            // //         row.infected,
-            // //         row.active,
-            // //         row.recovered,
-            // //         row.dead,
-            // //     ]);
-            // // });
+            let totalPopulation = d3.sum(Object.values(POPULATION));
 
-            setStateData([]);
-            let mapInitData = {...reports.total, name: 'India'};
-            // map init data
-            reports.total.active =
-                reports.total.infected -
-                reports.total.recovered -
-                reports.total.dead;
+            let testingData = getFormattedTestingData(
+                reports.testing_data,
+                totalPopulation,
+                'India'
+            );
+            setTestingData(testingData);
+
+            setDisplayCards(getCards(reports, reports.today));
+
+            let mapInitData = {
+                confirmed: reports.confirmed,
+                active: reports.active,
+                recovered: reports.recovered,
+                dead: reports.dead,
+                name: 'India',
+                today: reports.today,
+            };
             setMapInitData(mapInitData);
 
-            let isMobileScreen = window.innerWidth < 769;
+            let tableData = Object.values(reports.states);
+            setStateData(tableData);
+
+            // s
+            let t = {};
+            tableData.forEach((state) => {
+                t[state.name] = state;
+            });
+            setStateDataMapped(t);
 
             setTableData({
-                rows: reports.states,
+                rows: tableData,
                 columns: [
-                    {name: 'state/UT', accessor: 'state'},
+                    {name: 'state/UT', accessor: 'name'},
                     {
                         name: isMobileScreen ? 'cnfmd' : 'confirmed',
-                        accessor: 'infected',
-                        colorClass: 'text-red-600',
+                        accessor: 'confirmed',
+                        colorClass: 'red',
                     },
                     {
                         name: isMobileScreen ? 'actv' : 'active',
                         accessor: 'active',
-                        colorClass: 'text-orange-600',
+                        colorClass: 'orange',
                     },
                     {
                         name: isMobileScreen ? 'Rcvrd' : 'recovered',
                         accessor: 'recovered',
-                        colorClass: 'text-green-600',
+                        colorClass: 'green',
                     },
                     {
                         name: 'dead',
                         accessor: 'dead',
-                        colorClass: 'text-gray-600',
+                        colorClass: 'gray',
                     },
                 ],
             });
@@ -127,6 +129,20 @@ function Home({}) {
             console.log(err);
         }
     };
+
+    function callbackMap(point) {
+        // setStateDataMapped
+
+        let state = stateDataMapped[point.name],
+            totalPopulation = POPULATION[state.stateCode];
+
+        let testingData = getFormattedTestingData(
+            state.testing_data,
+            totalPopulation,
+            state.name
+        );
+        setTestingData(testingData);
+    }
 
     return (
         <div className={'container'}>
@@ -139,22 +155,7 @@ function Home({}) {
                     Live Covid-19 statistcs - India
                 </h1>
                 <div className="flex flex-wrap -mx-2 justify-center">
-                    <div className="w-full md:w-40 md:px-6 px-1">
-                        <div
-                            className={`${
-                                fetched ? 'fade-in anim-delay-2' : ''
-                            }`}
-                        >
-                            {fetched && (
-                                <Map
-                                    init={mapInitData}
-                                    seriesPoints={stateData}
-                                    stateCode={'IND'}
-                                />
-                            )}
-                        </div>
-                    </div>
-                    <div className="w-full md:w-40 md:px-6 px-1 pb-4">
+                    <div className="w-full md:w-40 md:mx-10 px-1 pb-4">
                         <div className="w-full fade-in">
                             {fetched && (
                                 <DisplayCard
@@ -173,6 +174,65 @@ function Home({}) {
                                 <Table
                                     rows={tableData.rows}
                                     columns={tableData.columns}
+                                    link={true}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="w-full md:w-40 md:mx-10 px-1">
+                        <div className="flex justify-between fade-in anim-delay-2">
+                            <div className="text-blue-600 items-center justify-center p-2">
+                                <div className="text-xs py-1">
+                                    Tested{' '}
+                                    <span className="font-bold">
+                                        {testingData.label}
+                                    </span>
+                                </div>
+                                <div className="text-xl font-bold">
+                                    {testingData.tested}
+                                </div>
+                                {testingData.date}
+                            </div>
+                            <div className="text-blue-600 items-center justify-center text-right p-2">
+                                <div className="text-xs py-1">
+                                    Population{' '}
+                                    <a
+                                        rel="noopener"
+                                        target="_blank"
+                                        className="bg-blue-100"
+                                        href={PUPULATION_SOURCE}
+                                    >
+                                        2019
+                                    </a>
+                                </div>
+                                <div className="text-sm font-bold">
+                                    {testingData.population}
+                                </div>
+                                <div className="text-sm font-bold">
+                                    {testingData.test_per_million} tests /
+                                    million people
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            className={`${
+                                fetched ? 'fade-in anim-delay-2' : ''
+                            }`}
+                        >
+                            {fetched && (
+                                <Map
+                                    initCardData={mapInitData}
+                                    seriesPoints={stateData}
+                                    stateCode={'IND'}
+                                    joinBy={'name'}
+                                    data={tableData}
+                                    cards={[
+                                        'confirmed',
+                                        'active',
+                                        'recovered',
+                                        'dead',
+                                    ]}
+                                    callback={callbackMap}
                                 />
                             )}
                         </div>

@@ -11,11 +11,12 @@
         "react-scripts": "3.4.1",
         "react-router-dom": "5.1.2",
         "react-router-transition": "^2.0.0",
-        "axios": "^0.19.2"
+        "axios": "^0.19.2",
+        "react-helmet": "^6.0.0"
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "react-scripts build && cp build/index.html build/404.html",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "deploy": "gh-pages -d build"

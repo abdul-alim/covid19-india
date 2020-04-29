@@ -2,18 +2,35 @@ import React, {useEffect, useState} from 'react';
 import DisplayCard from './display-card';
 import {defined} from '../utils/common-utils';
 
-const getCards = (total = {}, today = {}) => {
+let colorMap = {
+    confirmed: 'red',
+    active: 'orange',
+    recovered: 'green',
+    dead: 'gray',
+    tested: 'blue',
+};
+
+const getCards = (total = {}, today = {}, list) => {
+    return list.map((item) => {
+        return {
+            name: item,
+            value: total[item],
+            delta: today[item],
+            colorClass: colorMap[item],
+        };
+    });
+
     return [
         {
             name: 'Confirmed',
-            value: total.infected,
-            delta: today.infected,
+            value: total.confirmed,
+            delta: today.confirmed,
             colorClass: 'red',
         },
         {
             name: 'Active',
-            value: total.infected - total.recovered - total.dead,
-            delta: today.infected - today.recovered - today.dead,
+            value: total.active,
+            delta: today.active,
             colorClass: 'orange',
         },
         {
@@ -32,22 +49,23 @@ const getCards = (total = {}, today = {}) => {
 };
 
 class MapText extends React.Component {
-    constructor({init}) {
+    constructor(props) {
         super();
 
-        this.state = init;
+        this.state = {...props.initCardData, cards: props.cards};
         this.child = React.createRef();
     }
 
     update(data, today) {
         this.setState(data);
-        let cards = getCards(data, today);
+        let cards = getCards(data, today, this.props.cards);
         this.child.current.updateDisplayCardCounts(cards);
     }
 
     render() {
-        let cards = getCards(this.state);
-        let {name, infected} = this.state;
+        let cards = getCards(this.state, this.state.today, this.props.cards);
+        let {name} = this.state;
+
         return (
             <div>
                 <h2 className="font-extra-bold text-xl text-primary my-2">
@@ -56,7 +74,6 @@ class MapText extends React.Component {
                 <DisplayCard
                     styles={{bg: false, autoWidth: false}}
                     cards={cards}
-                    count={2000}
                     ref={this.child}
                 />
             </div>
