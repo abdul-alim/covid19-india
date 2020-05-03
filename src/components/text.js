@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import DisplayCard from './display-card';
-import {defined} from '../utils/common-utils';
+import React from "react";
+import DisplayCard from "./display-card";
 
 let colorMap = {
     confirmed: 'red',
@@ -19,33 +18,6 @@ const getCards = (total = {}, today = {}, list) => {
             colorClass: colorMap[item],
         };
     });
-
-    return [
-        {
-            name: 'Confirmed',
-            value: total.confirmed,
-            delta: today.confirmed,
-            colorClass: 'red',
-        },
-        {
-            name: 'Active',
-            value: total.active,
-            delta: today.active,
-            colorClass: 'orange',
-        },
-        {
-            name: 'Recovered',
-            value: total.recovered,
-            delta: today.recovered,
-            colorClass: 'green',
-        },
-        {
-            name: 'Dead',
-            value: total.dead,
-            delta: today.dead,
-            colorClass: 'gray',
-        },
-    ].filter((card) => defined(card.value) && !isNaN(card.value));
 };
 
 class MapText extends React.Component {
@@ -75,6 +47,7 @@ class MapText extends React.Component {
                     styles={{bg: false, autoWidth: false}}
                     cards={cards}
                     ref={this.child}
+                    callback={this.props.callback}
                 />
             </div>
         );

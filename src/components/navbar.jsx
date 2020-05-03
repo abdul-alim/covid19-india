@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Link, NavLink} from 'react-router-dom';
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 const navLinkProps = (path, animationDelay) => ({
     className: `${window.location.pathname === path ? 'focused' : ''}`,

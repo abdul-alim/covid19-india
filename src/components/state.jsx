@@ -3,10 +3,13 @@ import DisplayCard from './display-card';
 import axios from 'axios';
 import Table from './table';
 import Map from './Map';
-import {Link, useParams, useHistory} from 'react-router-dom';
+import {Link, useHistory, useParams} from 'react-router-dom';
 import {STATE_CODES} from '../constants/state-code';
 import {POPULATION, PUPULATION_SOURCE} from '../constants/population.js';
 import {getFormattedTestingData} from '../utils/format-test';
+import TrendGraph from './trend-chart';
+import {clone, IS_MOBILE_DEVICE, timeDifference} from '../utils/common-utils';
+import Chart from './Chart';
 
 const d3 = window.d3;
 
@@ -15,6 +18,7 @@ function State({}) {
     const [tableData, setTableData] = useState({rows: [], columns: []});
     const [mapInitData, setMapInitData] = useState({});
     const [testingData, setTestingData] = useState({});
+    const [spinner, setSpinner] = useState(true);
     const childRef = useRef();
 
     const {stateCode} = useParams();
@@ -60,6 +64,11 @@ function State({}) {
 
     const [displayCards, setDisplayCards] = useState(getCards());
     const [districtData, setDistrictData] = useState([]);
+    const [dailyChart, setDailyChart] = useState(null);
+    const [caseHistory, setCaseHistory] = useState(null);
+    const [chartStore, updateChartStore] = useState({});
+    const [percentChart, setPercentChart] = useState({});
+    const [updatedTime, setUpdatedTime] = useState();
 
     useEffect(() => {
         setFetched(false);
@@ -71,39 +80,30 @@ function State({}) {
             let [
                 {data: district_data},
                 {data: state_data},
+                {data: dailyChart},
+                {data: percentChartJson},
             ] = await Promise.all([
-                axios.get('/data/district_v2.json'),
-                axios.get('/data/trend_v2.json'),
+                axios.get('https://www.track-covid19.in/server/covid-app/district_v2'),
+                axios.get('https://www.track-covid19.in/server/covid-app/reports_v2'),
+                axios.get('/charts/daily.json'),
+                axios.get('/charts/percent-chart.json'),
             ]);
+
+            // hide spinner
+            setSpinner(false);
 
             let districtInfo = district_data[stateCode];
             let stateInfo = state_data.states[stateCode];
-
             let {testing_data} = stateInfo;
-
-            var parseTime = d3.timeParse('%d/%m/%Y');
-            var formatTime = d3.timeFormat('%B %d');
-
             let state_population = POPULATION[stateCode];
 
-            let testingData = getFormattedTestingData(
-                testing_data,
-                state_population,
-                districtInfo.state
-            );
+            var formatTime = d3.timeFormat('%B %d, %I:%M%p IST');
+            setUpdatedTime(formatTime(new Date(districtInfo.updatedTime)));
+
+            let testingData = getFormattedTestingData(testing_data, state_population, districtInfo.state);
             setTestingData(testingData);
 
-            // let testingData = {
-            //     tested: testing_data.tested.toLocaleString(),
-            //     date: formatTime(parseTime(testing_data.date)),
-            //     population: state_population.toLocaleString(),
-            //     test_per_million: Math.round(
-            //         (testing_data.tested / state_population) * 1000000
-            //     ).toLocaleString(),
-            // };
-
             setDisplayCards(getCards(stateInfo, stateInfo.today));
-
             setDistrictData(districtInfo.districts);
 
             let mapInitData = {
@@ -121,27 +121,46 @@ function State({}) {
                 columns: [
                     {name: 'district', accessor: 'district'},
                     {
-                        name: 'confirmed',
+                        name: IS_MOBILE_DEVICE ? 'cnfmd' : 'confirmed',
                         accessor: 'confirmed',
                         colorClass: 'red',
                     },
                     {
-                        name: 'active',
+                        name: IS_MOBILE_DEVICE ? 'actv' : 'active',
                         accessor: 'active',
                         colorClass: 'orange',
                     },
                     {
-                        name: 'recovered',
+                        name: IS_MOBILE_DEVICE ? 'Rcvrd' : 'recovered',
                         accessor: 'recovered',
                         colorClass: 'green',
                     },
                     {
-                        name: 'deceased',
+                        name: 'dead',
                         accessor: 'dead',
                         colorClass: 'gray',
                     },
                 ],
             });
+
+            setDailyChart(dailyChart);
+            if (stateInfo.history) {
+                setCaseHistory(stateInfo.history);
+            }
+
+            {
+                percentChartJson.seriesdata.chartdata[0] = {
+                    type: 'pie',
+                    data: [
+                        ['Active', stateInfo.active],
+                        ['Recovered', stateInfo.recovered],
+                        ['Dead', stateInfo.dead],
+                    ],
+                };
+                if (stateInfo.confirmed > 0) {
+                    setPercentChart(percentChartJson);
+                }
+            }
 
             setFetched(true);
         } catch (err) {
@@ -153,135 +172,103 @@ function State({}) {
         history.push('/state/' + event.target.value);
     };
 
+    function chartCallback(chart, name) {
+        chartStore[name] = chart;
+        updateChartStore(chartStore);
+    }
+
     return (
-        <div className={`container opacity-0 my-2 ${fetched ? 'fade-in' : ''}`}>
-            <div className="flex flex-wrap -mx-2 justify-center">
-                <div className="w-full md:w-40 md:px-6">
-                    {fetched && (
-                        <div className="w-full md:w-40 font-bold cursor-pointer flex pb-6 text-xs text-gray-600 items-center">
-                            <Link to={'/'}>Home</Link>{' '}
-                            <span className="px-1">/</span>
-                            <select
-                                onChange={changeStatePage}
-                                defaultValue={stateCode}
-                                name="states"
-                                className="bg-gray-200 font-bold appearance-none py-1 px-2 state-select"
-                            >
-                                {statesKeys.map((key) => {
-                                    return (
-                                        <option value={key} key={key}>
-                                            {STATE_CODES[key]}
-                                        </option>
-                                    );
-                                })}
-                            </select>
-                        </div>
-                    )}
-
-                    <div className="my-6">
-                        <h1 className="font-extra-bold text-primary text-3xl">
-                            {stateName}
-                        </h1>
-                        <div className="text-sm">Last Updated on</div>
-                    </div>
-
-                    <div className="w-full fade-in">
-                        {fetched && (
-                            <DisplayCard
-                                ref={childRef}
-                                cards={displayCards}
-                                count={2000}
-                            />
-                        )}
-                    </div>
-                    <div
-                        className={`w-full my-6 ${
-                            fetched ? 'fade-in anim-delay-1' : ''
-                        }`}
-                    >
-                        {fetched && (
-                            <Table
-                                rows={tableData.rows}
-                                columns={tableData.columns}
-                            />
-                        )}
-                    </div>
+        <div className='container'>
+            {spinner && (
+                <div className="flex items-center justify-center fixed h-screen w-full z-10" style={{left: 0, top: 0}}>
+                    <div className="lds-dual-ring"></div>
                 </div>
-                <div className="w-full md:w-40 md:px-6 mt-6 pt-2">
-                    <div className="sticky">
-                        <div className="flex justify-between fade-in anim-delay-2">
-                            <div className="text-blue-600 items-center justify-center p-2">
-                                <div className="text-xs py-1">
-                                    Tested{' '}
-                                    <span className="font-bold">
-                                        {testingData.label}
-                                    </span>
-                                </div>
-                                <div className="text-xl font-bold">
-                                    {testingData.tested}
-                                </div>
-                                {testingData.date}
+            )}
+            {fetched && (
+                <div className='opacity-0 my-6 fade-in'>
+                    <div className="flex flex-wrap justify-center">
+                        <div className="w-full md:w-40 md:mx-10 pb-4">
+                            <div className="w-full md:w-40 font-bold cursor-pointer flex pb-6 text-xs text-gray-600 items-center">
+                                <Link to={'/'}>Home</Link> <span className="px-1">/</span>
+                                <select
+                                    onChange={changeStatePage}
+                                    defaultValue={stateCode}
+                                    name="states"
+                                    className="bg-gray-200 font-bold appearance-none py-1 px-2 state-select"
+                                >
+                                    {statesKeys.map((key) => {
+                                        return (
+                                            <option value={key} key={key}>
+                                                {STATE_CODES[key]}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
                             </div>
-                            <div className="text-blue-600 items-center justify-center text-right p-2">
-                                <div className="text-xs py-1">
-                                    Population{' '}
-                                    <a
-                                        rel="noopener"
-                                        target="_blank"
-                                        className="bg-blue-100"
-                                        href={PUPULATION_SOURCE}
-                                    >
-                                        2019
-                                    </a>
+
+                            <div className="my-6">
+                                <h1 className="font-extra-bold text-primary text-3xl">{stateName}</h1>
+                                <div className="text-sm text-gray-700 font-bold">Last updated on {updatedTime}</div>
+                            </div>
+
+                            <div className="w-full fade-in">
+                                <DisplayCard ref={childRef} cards={displayCards} count={2000} />
+                            </div>
+                            <div className={`w-full my-6 ${fetched ? 'fade-in anim-delay-1' : ''}`}>
+                                <Table rows={tableData.rows} columns={tableData.columns} />
+                            </div>
+                        </div>
+                        <div className="w-full md:w-40 md:mx-10 pb-4">
+                            <div className="">
+                                <div className="flex justify-between fade-in anim-delay-2">
+                                    <div className="text-blue-600 items-center justify-center p-2">
+                                        <div className="text-xs py-1">
+                                            Tested <span className="font-bold">{testingData.label}</span>
+                                        </div>
+                                        <div className="text-xl font-bold">{testingData.tested}</div>
+                                        {testingData.date}
+                                    </div>
+                                    <div className="text-blue-600 items-center justify-center text-right p-2">
+                                        <div className="text-xs py-1">
+                                            Population{' '}
+                                            <a
+                                                rel="noopener"
+                                                target="_blank"
+                                                className="bg-blue-100"
+                                                href={PUPULATION_SOURCE}
+                                            >
+                                                2019
+                                            </a>
+                                        </div>
+                                        <div className="text-sm font-bold">{testingData.population}</div>
+                                        <div className="text-sm font-bold">
+                                            {testingData.test_per_million} tests / million people
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="text-sm font-bold">
-                                    {testingData.population}
-                                </div>
-                                <div className="text-sm font-bold">
-                                    {testingData.test_per_million} tests /
-                                    million people
+                                <div className="fade-in opacity-0  anim-delay-2 py-4">
+                                    <Map
+                                        initCardData={mapInitData}
+                                        stateCode={stateCode}
+                                        seriesPoints={districtData}
+                                        joinBy={'district'}
+                                        cards={['confirmed', 'active', 'recovered', 'dead']}
+                                    />
                                 </div>
                             </div>
                         </div>
-                        <div
-                            className={`${
-                                fetched
-                                    ? 'fade-in opacity-0  anim-delay-2 py-4'
-                                    : ''
-                            }`}
-                        >
-                            {fetched && (
-                                <Map
-                                    initCardData={mapInitData}
-                                    stateCode={stateCode}
-                                    seriesPoints={districtData}
-                                    joinBy={'district'}
-                                    cards={[
-                                        'confirmed',
-                                        'active',
-                                        'recovered',
-                                        'dead',
-                                    ]}
-                                />
-                            )}
+                    </div>
+                    <div className="flex flex-wrap justify-center">
+                        <div className="w-full md:w-40 md:mx-10 state-bar border my-6">
+                            {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
+                        </div>
+
+                        <div className="w-full md:w-40 md:mx-10 border my-6" style={{height: '400px'}}>
+                            <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex flex-wrap -mx-2 justify-center">
-                <div className="w-full md:w-40 md:mx-6  mt-6 pt-2 percent-chart border"></div>
-                <div className="w-full md:w-40 md:mx-6  mt-6 pt-2 percent-chart border"></div>
-            </div>
-
-            <div className="flex flex-wrap -mx-2 justify-center">
-                <div className="w-full md:w-40 md:mx-6  mt-6 pt-2 percent-chart border"></div>
-                <div className="w-full md:w-40 md:mx-6  mt-6 pt-2 percent-chart border"></div>
-            </div>
-
-            <div className="flex flex-wrap -mx-2 justify-center">
-                <div className="w-full md:w-40 md:mx-6  mt-6 pt-2 percent-chart border"></div>
-                <div className="w-full md:w-40 md:mx-6  mt-6 pt-2 percent-chart border"></div>
-            </div>
+            )}
         </div>
     );
 }

@@ -27,7 +27,7 @@ export const STATE_CODES = {
     UT: 'Uttarakhand',
     UP: 'Uttar Pradesh',
     WB: 'West Bengal',
-    AN: 'Andaman and Nicobar Islands',
+    AN: 'Andaman and Nicobar',
     CH: 'Chandigarh',
     DN: 'Dadra and Nagar Haveli',
     DD: 'Daman and Diu',

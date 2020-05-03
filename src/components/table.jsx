@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-import {ascending, descending} from '../utils/sort';
-import Arrow from './arrow';
+import { ascending, descending } from "../utils/sort";
+import Arrow from "./arrow";
 
 /**
  *
@@ -10,10 +10,12 @@ import Arrow from './arrow';
  * @constructor
  */
 function Table(props) {
-    const [{rows, columns}, setValues] = useState({
+    let [{rows, columns}, setValues] = useState({
         columns: props.columns,
-        rows: props.rows,
+        rows: props.rows.filter((row) => row.confirmed > 0),
     });
+
+    rows = rows.filter((row) => row.confirmed > 0);
 
     useEffect(() => {
         setValues({
@@ -92,7 +94,7 @@ function Table(props) {
                                     <span>
                                         {j > 0 && todayCount ? (
                                             <span
-                                                className={` mr-1 text-${colorClass}-600`}
+                                                className={` mr-1 text-${colorClass}-600 break-words`}
                                             >
                                                 <Arrow up={todayCount > 0} />
                                                 <span>{todayCount}</span>

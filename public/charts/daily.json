@@ -56,6 +56,20 @@
                     "color": "#F5F5F5",
                     "show": true,
                     "strokeWidth": 1
+                },
+                "threshold": {
+                    "line": {
+                        "show": true,
+                        "values": [1584988200000, 1586802600000],
+                        "color": "#9C27B0",
+                        "label": {
+                            "text": ["Lockdown 1", "Lockdown 2"],
+                            "hAlign": "center",
+                            "fontSize": "12",
+                            "fontColor": "#673AB7",
+                            "fontWeight": "bold"
+                        }
+                    }
                 }
             },
             "yaxis": [
@@ -63,6 +77,7 @@
                     "label": {
                         "text": ""
                     },
+                    "orient": "right",
                     "axisline": {
                         "show": false
                     },
@@ -114,6 +129,13 @@
         "theme": "covid_theme",
         "title": {
             "text": "Daily Trend"
+        },
+        "intelligence": {
+            "dataCount": {
+                "marker": 500,
+                "animation": 5000,
+                "datalabels": 500
+            }
         }
     },
     "tooltip": {

@@ -14,39 +14,20 @@ var formatTime = d3.timeFormat('%B %d');
 export function getFormattedTestingData(testing_data, totalPopulation, label) {
     let dateString = '';
 
-    if (testing_data.date) {
-        dateString = (
-            <div className="text-xs">
-                As of {formatTime(parseTime(testing_data.date))} as per{' '}
-                <a
-                    href={testing_data.source}
-                    rel="noopener"
-                    className="bg-blue-100"
-                    target="_blank"
-                >
-                    source
-                </a>
-            </div>
-        );
-    } else {
-        dateString = (
-            <div className="text-xs">
-                <div>Combined all states as per latest data.</div>
-                {/*<div>*/}
-                {/*    {` ${isMobileScreen ? 'Tap' : 'Hover'}`} the map for*/}
-                {/*    state wise details.*/}
-                {/*</div>*/}
-            </div>
-        );
-    }
+    dateString = (
+        <div className="text-xs">
+            {label === 'Total' ? 'As per latest IMCR ' : `Till ${formatTime(parseTime(testing_data.date))} as per `}
+            <a href={testing_data.source} rel="noopener" className="bg-blue-100" target="_blank">
+                {label === 'Total' ? 'Report' : 'source'}
+            </a>
+        </div>
+    );
 
     return {
         tested: testing_data.tested.toLocaleString(),
         date: dateString,
         population: totalPopulation.toLocaleString(),
-        test_per_million: Math.round(
-            (testing_data.tested / totalPopulation) * 1000000
-        ).toLocaleString(),
+        test_per_million: Math.round((testing_data.tested / totalPopulation) * 1000000).toLocaleString(),
         label: ` - ${label}`,
     };
 }
