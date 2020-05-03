@@ -6,9 +6,9 @@
     "metadata": {
         "axes": {
             "x": [0],
-            "y": [[1]],
-            "tooltip": [0, "{{val(2)}}: {{val(1)}}"],
-            "clr": [2]
+            "y": [[1], [2]],
+            "tooltip": [0, "<b style='color:{{clr}}'>{{val(3)}}: {{val(1)}} {{val(2)}}</b>"],
+            "clr": [3]
         },
         "columns": [
             {
@@ -23,6 +23,16 @@
                 "datatype": "numeric"
             },
             {
+                "dataindex": 1,
+                "columnname": "Death Rate",
+                "datatype": "numeric",
+                "numeric": {
+                    "format": {
+                        "suffix": "%"
+                    }
+                }
+            },
+            {
                 "columnname": "Total"
             }
         ]
@@ -35,11 +45,12 @@
                     "text": ""
                 },
                 "ticklabel": {
-                    "alignMode": "rotate",
+                    "alignMode": "rotate(45)",
                     "marginLeft": 0,
                     "marginTop": 1,
                     "marginBottom": 1,
-                    "marginRight": 0
+                    "marginRight": 0,
+                    "maxHeight": 60
                 },
                 "axisline": {
                     "show": false
@@ -53,7 +64,20 @@
             "yaxis": [
                 {
                     "label": {
-                        "text": ""
+                        "text": "Confirmed, Recovered & Dead"
+                    },
+                    "axisline": {
+                        "show": false
+                    },
+                    "grid": {
+                        "color": "#F5F5F5",
+                        "show": true,
+                        "strokeWidth": 1
+                    }
+                },
+                {
+                    "label": {
+                        "text": "Death Rate"
                     },
                     "axisline": {
                         "show": false
@@ -74,6 +98,15 @@
                         "outerPadding": 0
                     },
                     "outerPadding": 0
+                },
+                "line": {
+                    "strokeWidth": 3,
+                    "marker": {
+                        "size": 2
+                    },
+                    "datalabels": {
+                        "show": true
+                    }
                 }
             }
         }
@@ -81,13 +114,16 @@
     "legend": {
         "fontSize": 12,
         "enabled": true,
-        "colors": ["#EF5350", "#26A69A", "#B0BEC5"],
+        "colors": ["#EF5350", "#26A69A", "#B0BEC5", "#607D8B"],
         "marginTop": -10
     },
     "canvas": {
         "theme": "covid_theme",
         "title": {
             "text": "Affected State and Union Territories"
+        },
+        "subtitle": {
+            "text": ""
         }
     }
 }

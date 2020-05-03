@@ -1,21 +1,23 @@
-var covid_theme = function() {
+var covid_theme = function () {
     return {
         canvas: {
             fontColor: 'black',
             fontFamily: 'Avenir, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif',
             fontSize: 16,
             title: {
-                fontSize: 16
+                fontSize: 16,
             },
             subtitle: {
-                show: false
+                show: false,
+                fontSize: 14,
+                fontCOlor: '#111',
             },
             shadow: {
-                show: false
+                show: false,
             },
             border: {
-                show: false
-            }
+                show: false,
+            },
         },
         credits: {
             enabled: false,
@@ -24,7 +26,7 @@ var covid_theme = function() {
             href: 'ht' + 'tps://zoho.com',
             imageUrl: 'images/credit.png',
             imageWidth: 64,
-            imageHeight: 12
+            imageHeight: 12,
         },
         tooltip: {
             useChartEffect: false,
@@ -36,7 +38,7 @@ var covid_theme = function() {
             padding: 10,
             borderRadius: 0,
             maxWidth: '80%',
-            shadow: '0 0 3px 3px rgba(0,0,0,0.2)'
+            shadow: '0 0 3px 3px rgba(0,0,0,0.2)',
         },
         legend: {
             useChartEffect: false,
@@ -44,17 +46,17 @@ var covid_theme = function() {
             hAlign: 'center',
             vAlign: 'bottom',
             marginBottom: 0,
-            marginTop: 0
+            marginTop: 0,
         },
         chart: {
             axes: {
                 xaxis: {
                     ticklabel: {
-                        fontSize: 12
-                    }
-                }
-            }
-        }
+                        fontSize: 12,
+                    },
+                },
+            },
+        },
     };
 };
 

@@ -10,6 +10,7 @@
     "seriesdata": {
         "chartdata": [
             {
+                "colorFinder": "colorFinder",
                 "type": "geoheatmap",
                 "data": []
             }
@@ -55,28 +56,23 @@
             },
             {
                 "dataindex": 1,
-                "columnname": "Total Infected",
+                "columnname": "Confirmed",
                 "datatype": "numeric"
             },
             {
                 "dataindex": 2,
-                "columnname": "Recovered",
-                "datatype": "ordinal"
+                "columnname": "Active",
+                "datatype": "numeric"
             },
             {
                 "dataindex": 3,
-                "columnname": "Dead",
-                "datatype": "ordinal"
+                "columnname": "Recovered",
+                "datatype": "numeric"
             },
             {
                 "dataindex": 4,
-                "columnname": "Indian Nationals",
-                "datatype": "ordinal"
-            },
-            {
-                "dataindex": 5,
-                "columnname": "Foreign Nationals",
-                "datatype": "ordinal"
+                "columnname": "Dead",
+                "datatype": "numeric"
             }
         ]
     },
@@ -138,7 +134,6 @@
     },
     "legend": {
         "enabled": true,
-        "colors": ["white", "red"],
         "colorBand": {
             "minRange": 0
         },
