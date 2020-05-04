@@ -38,48 +38,73 @@
                     }
                 }
 
+                function titleCase(str) {
+                    var splitStr = str.toLowerCase().split(' ');
+                    for (var i = 0; i < splitStr.length; i++) {
+                        // You do not need to check if i is larger than splitStr length, as your for does that for you
+                        // Assign it back to the array
+                        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+                    }
+                    // Directly return the joined string
+                    return splitStr.join(' ');
+                }
+
                 function ascending(a, b) {
                     return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
                 }
 
-                let trend = await getJson('trend_v2.json');
-
-                let allStates = Object.values(trend.states);
-
-                let all_history = [];
-
-                allStates.forEach((d) => {
-                    all_history = [...all_history, ...d.history];
-                });
-
-                all_history.forEach((d) => {
-                    d.date1 = new Date(d.date);
-                });
-
-                all_history.sort(function (a, b) {
-                    return ascending(a.date1, b.date1);
-                });
-
-                let grouped = groupBy(all_history, 'date');
-
-                let a = [];
-
-                each(grouped, (list, date) => {
-                    let confirmed = sum(list, 'confirmed');
-                    let active = sum(list, 'active');
-                    let recovered = sum(list, 'recovered');
-                    let dead = sum(list, 'dead');
-                    a.push({
-                        date,
-                        confirmed,
-                        active,
-                        recovered,
-                        dead,
+                {
+                    let zones = await getJson('zones.json');
+                    let stateCodes = await getJson('zones.json');
+                    zones.forEach((zone) => {
+                        zone[2] = titleCase(zone[2]);
                     });
-                });
 
-                console.log(JSON.stringify(a))
+                    let grouped = groupBy(zones, 2);
+                    each(grouped, (list) => {
+                        list.forEach((item) => (item.length = 2));
+                    });
 
+                    console.log(JSON.stringify(grouped));
+                }
+
+                {
+                    // let trend = await getJson('trend_v2.json');
+                    //
+                    // let allStates = Object.values(trend.states);
+                    //
+                    // let all_history = [];
+                    //
+                    // allStates.forEach((d) => {
+                    //     all_history = [...all_history, ...d.history];
+                    // });
+                    //
+                    // all_history.forEach((d) => {
+                    //     d.date1 = new Date(d.date);
+                    // });
+                    //
+                    // all_history.sort(function (a, b) {
+                    //     return ascending(a.date1, b.date1);
+                    // });
+                    //
+                    // let grouped = groupBy(all_history, 'date');
+                    //
+                    // let a = [];
+                    //
+                    // each(grouped, (list, date) => {
+                    //     let confirmed = sum(list, 'confirmed');
+                    //     let active = sum(list, 'active');
+                    //     let recovered = sum(list, 'recovered');
+                    //     let dead = sum(list, 'dead');
+                    //     a.push({
+                    //         date,
+                    //         confirmed,
+                    //         active,
+                    //         recovered,
+                    //         dead,
+                    //     });
+                    // });
+                }
             })();
         </script>
     </body>

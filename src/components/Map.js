@@ -14,7 +14,7 @@ class Map extends React.Component {
     };
 
     async componentDidMount() {
-        let {stateCode, seriesPoints: rawPoints, joinBy} = this.props,
+        let {stateCode, seriesPoints: rawPoints, joinBy, zones} = this.props,
             codeLower = stateCode.toLowerCase(),
             scopeCode = `countries-ind-${codeLower}-2`,
             seriesPoints = [];
@@ -44,6 +44,11 @@ class Map extends React.Component {
             object_map[row[joinBy]] = row;
         });
 
+        let zoneMap = {};
+        zones.forEach((row) => {
+            zoneMap[row[0]] = row[1];
+        });
+
         const [{data: toposjon}, {data: mapData}] = await Promise.all([
             axios.get(`/maps/${stateCode}.topojson`),
             axios.get('/charts/map.json'),
@@ -52,6 +57,7 @@ class Map extends React.Component {
         window.$ZC.mapCollections[scopeCode] = toposjon;
 
         // create data for all available district
+        let availableNames = [];
         seriesPoints = toposjon.objects.source.geometries.map(({properties: {name_ascii}}) => {
             let confirmed = 0,
                 active = 0,
@@ -61,7 +67,27 @@ class Map extends React.Component {
             if (object_map[name_ascii]) {
                 ({confirmed, active, recovered, dead} = object_map[name_ascii]);
             }
-            return [name_ascii, confirmed, active, recovered, dead];
+            availableNames.push(name_ascii);
+            let zone = null;
+            if (zones) {
+                zone = zoneMap[name_ascii];
+            }
+            return [name_ascii, confirmed, active, recovered, dead, zone];
+        });
+
+        // list the non matched names
+        rawPoints.forEach((row) => {
+            if (!availableNames.includes(row[joinBy])) {
+                console.log('map mitchmatch', row[joinBy]);
+            }
+        });
+
+        console.log('*****************************');
+
+        zones.forEach((district) => {
+            if (!availableNames.includes(district[0])) {
+                console.log('zone mitchmatch', district[0]);
+            }
         });
 
         if (this.myDiv) {
@@ -123,14 +149,32 @@ class Map extends React.Component {
 
     callback(card, i) {
         let colorMap = ['#e84b36', '#f88658', '#007e1a', '#2f2f2f'];
-
-        // let {colors, stops} = this.getColorsNStops(this.mapExtents[card.name].count, this.mapExtents[card.name].colors);
+        
         this.map.userdata.legend.colors = [...this.mapExtents[card.name].colors];
         this.map.userdata.legend.colorBand.stops = [0, this.mapExtents[card.name].count];
-
+    
+        this.map.userdata.legend.colorBand.ranges = null;
+        this.map.userdata.legend.filter.enabled = false;
         this.map.userdata.metadata.axes.clr = [i + 1];
         this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = colorMap[i];
         this.map.redraw();
+    }
+
+    changeMapType(event) {
+        d3.selectAll('button').classed('text-primary', false);
+        event.target.classList.add('text-primary');
+
+        if (event.target.name === 'zone') {
+            this.map.userdata.legend.colors = ['#ff1100', '#f88658', '#009688'];
+            this.map.userdata.legend.colorBand.ranges = [['Red Zone'], ['Orange Zone'], ['Green Zone']];
+            this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = "#ddd";
+            this.map.userdata.legend.filter.enabled = true;
+            this.map.userdata.metadata.axes.clr = [5];
+            this.map.redraw();
+        } else {
+            this.callback({name: this.props.cards[0]}, 0)
+        }
+        
     }
 
     render() {
@@ -143,6 +187,26 @@ class Map extends React.Component {
                     callback={this.callback.bind(this)}
                 />
                 <div className="live-map my-6" ref={(c) => (this.myDiv = c)}></div>
+                {this.props.zones && (
+                    <div className="my-4 text-sm">
+                        <button
+                            className="bg-gray-300 px-4 py-3 font-bold text-primary"
+                            name="default"
+                            onClick={this.changeMapType.bind(this)}
+                            onTouchStart={this.changeMapType.bind(this)}
+                        >
+                            Affected Areas
+                        </button>
+                        <button
+                            className="bg-gray-300 px-4 py-3 font-bold ml-2"
+                            name="zone"
+                            onClick={this.changeMapType.bind(this)}
+                            onTouchStart={this.changeMapType.bind(this)}
+                        >
+                            Zones
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }

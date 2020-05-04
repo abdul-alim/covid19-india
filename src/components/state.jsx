@@ -69,6 +69,7 @@ function State({}) {
     const [chartStore, updateChartStore] = useState({});
     const [percentChart, setPercentChart] = useState({});
     const [updatedTime, setUpdatedTime] = useState();
+    const [zones, setZones] = useState();
 
     useEffect(() => {
         setFetched(false);
@@ -82,11 +83,13 @@ function State({}) {
                 {data: state_data},
                 {data: dailyChart},
                 {data: percentChartJson},
+                {data: zones},
             ] = await Promise.all([
                 axios.get('https://www.track-covid19.in/server/covid-app/district_v2'),
                 axios.get('https://www.track-covid19.in/server/covid-app/reports_v2'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/percent-chart.json'),
+                axios.get('/data/zones.json'),
             ]);
 
             // hide spinner
@@ -162,6 +165,8 @@ function State({}) {
                 }
             }
 
+            setZones(zones[stateCode]);
+
             setFetched(true);
         } catch (err) {
             console.log(err);
@@ -178,14 +183,14 @@ function State({}) {
     }
 
     return (
-        <div className='container'>
+        <div className="container">
             {spinner && (
                 <div className="flex items-center justify-center fixed h-screen w-full z-10" style={{left: 0, top: 0}}>
                     <div className="lds-dual-ring"></div>
                 </div>
             )}
             {fetched && (
-                <div className='opacity-0 my-6 fade-in'>
+                <div className="opacity-0 my-6 fade-in">
                     <div className="flex flex-wrap justify-center">
                         <div className="w-full md:w-40 md:mx-10 pb-4">
                             <div className="w-full md:w-40 font-bold cursor-pointer flex pb-6 text-xs text-gray-600 items-center">
@@ -253,6 +258,7 @@ function State({}) {
                                         seriesPoints={districtData}
                                         joinBy={'district'}
                                         cards={['confirmed', 'active', 'recovered', 'dead']}
+                                        zones={zones}
                                     />
                                 </div>
                             </div>
