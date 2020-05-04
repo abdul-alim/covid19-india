@@ -73,6 +73,11 @@
                 "dataindex": 4,
                 "columnname": "Dead",
                 "datatype": "numeric"
+            },
+            {
+                "dataindex": 5,
+                "columnname": "Zones",
+                "datatype": "ordinal"
             }
         ]
     },
