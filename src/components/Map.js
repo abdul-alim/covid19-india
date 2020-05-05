@@ -45,9 +45,11 @@ class Map extends React.Component {
         });
 
         let zoneMap = {};
-        zones.forEach((row) => {
-            zoneMap[row[0]] = row[1];
-        });
+        if (zones) {
+            zones.forEach((row) => {
+                zoneMap[row[0]] = row[1];
+            });
+        }
 
         const [{data: toposjon}, {data: mapData}] = await Promise.all([
             axios.get(`/maps/${stateCode}.topojson`),
@@ -84,11 +86,13 @@ class Map extends React.Component {
 
         console.log('*****************************');
 
-        zones.forEach((district) => {
-            if (!availableNames.includes(district[0])) {
-                console.log('zone mitchmatch', district[0]);
-            }
-        });
+        if (zones) {
+            zones.forEach((district) => {
+                if (!availableNames.includes(district[0])) {
+                    console.log('zone mitchmatch', district[0]);
+                }
+            });
+        }
 
         if (this.myDiv) {
             this.myDiv.classList.add('fade-in');
@@ -133,11 +137,11 @@ class Map extends React.Component {
             mapData.chart.plot.plotoptions.geoheatmap.events = {
                 mousemove: mapAction,
                 tap: (error, data) => {
+                    mapAction(error, data);
                     if (tapCallback) {
-                        mapAction(error, data);
-                        tapCallback(error, data);
-                        window.d3.event.allowDefault = true;
+                        tapCallback(error, data, this.map);
                     }
+                    window.d3.event.allowDefault = true;
                 },
                 click: clickCallback || defaultEvent,
             };
@@ -157,6 +161,7 @@ class Map extends React.Component {
         this.map.userdata.legend.filter.enabled = false;
         this.map.userdata.metadata.axes.clr = [i + 1];
         this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = colorMap[i];
+        this.map.eventHandler.mapEvents.clearHighlightedPoints()
         this.map.redraw();
     }
 
@@ -170,6 +175,7 @@ class Map extends React.Component {
             this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = "#ddd";
             this.map.userdata.legend.filter.enabled = true;
             this.map.userdata.metadata.axes.clr = [5];
+            this.map.eventHandler.mapEvents.clearHighlightedPoints()
             this.map.redraw();
         } else {
             this.callback({name: this.props.cards[0]}, 0)

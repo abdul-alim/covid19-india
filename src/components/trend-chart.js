@@ -14,9 +14,11 @@ function TrendGraph(props) {
     const ref = useRef();
     const [chartStore, updateChartStore] = useState({});
     const [dailyChartMode, setDailyChartMode] = useState('cumulative');
+
+    const [timeFrame, setTimeFrame] = useState('month');
+    const [cumulative, setCumulative] = useState(true);
+
     let trendTime = {'1week': 7, '2week': 14, month: 30},
-        cumulative = true,
-        timeFrame = 'month',
         seriesNames = ['confirmed', 'active', 'recovered', 'dead'];
 
     /**
@@ -63,14 +65,15 @@ function TrendGraph(props) {
      * @param event
      */
     function updateDailyChartCumulative(event, type) {
-        cumulative = type || event.target.value === 'cumulative';
-        
+        let cumulativeL = type || event.target.value === 'cumulative';
+        setCumulative(cumulativeL)
+
         if (!type) {
             setDailyChartMode(event.target.value);
         }
 
         let chart = chartStore.daily;
-        let {series, minRange} = getTrendSeries(cumulative, trendTime[timeFrame]);
+        let {series, minRange} = getTrendSeries(cumulativeL, trendTime[timeFrame]);
         series.forEach((s, i) => {
             chart.userdata.seriesdata.chartdata[i].data = s;
         });
@@ -79,9 +82,10 @@ function TrendGraph(props) {
     }
 
     function updateTimeFrame(event) {
-        timeFrame = event.target.value;
+        let timeF = event.target.value;
+        setTimeFrame(timeF);
         let chart = chartStore.daily;
-        let {series, minRange} = getTrendSeries(cumulative, trendTime[timeFrame]);
+        let {series, minRange} = getTrendSeries(cumulative, trendTime[timeF]);
         series.forEach((s, i) => {
             chart.userdata.seriesdata.chartdata[i].data = s;
         });
@@ -89,7 +93,7 @@ function TrendGraph(props) {
         chart.redraw();
     }
 
-    if(history.length) {
+    if (history.length) {
         let {series, minRange} = getTrendSeries(true, trendTime[timeFrame]);
         series.forEach((series, i) => {
             chartJson.seriesdata.chartdata[i] = {data: series, seriesname: toCapitalize(seriesNames[i])};
@@ -141,7 +145,7 @@ function TrendGraph(props) {
                 </label>
             </div>
             <div className="trend-graph">
-                <Chart seriesData={chartJson} name="daily"  callback={chartCallback} />
+                <Chart seriesData={chartJson} name="daily" callback={chartCallback} />
             </div>
         </React.Fragment>
     );

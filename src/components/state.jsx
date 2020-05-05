@@ -85,8 +85,8 @@ function State({}) {
                 {data: percentChartJson},
                 {data: zones},
             ] = await Promise.all([
-                axios.get('https://www.track-covid19.in/server/covid-app/district_v2'),
-                axios.get('https://www.track-covid19.in/server/covid-app/reports_v2'),
+                axios.get('https://api.track-corona.in/district_v2.json'),
+                axios.get('https://api.track-corona.in/reports_v2.json'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/percent-chart.json'),
                 axios.get('/data/zones.json'),
@@ -101,7 +101,7 @@ function State({}) {
             let state_population = POPULATION[stateCode];
 
             var formatTime = d3.timeFormat('%B %d, %I:%M%p IST');
-            setUpdatedTime(formatTime(new Date(districtInfo.updatedTime)));
+            setUpdatedTime(districtInfo.updatedTime ? formatTime(new Date(districtInfo.updatedTime)) : '-');
 
             let testingData = getFormattedTestingData(testing_data, state_population, districtInfo.state);
             setTestingData(testingData);

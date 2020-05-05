@@ -75,7 +75,7 @@ function Home({}) {
     const getData = async () => {
         try {
             let [{data: reports}, {data: dailyChart}, {data: stateBar}, {data: percentChartJson}] = await Promise.all([
-                axios.get('https://www.track-covid19.in/server/covid-app/reports_v2'),
+                axios.get('https://api.track-corona.in/reports_v2.json'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/states.json'),
                 axios.get('/charts/percent-chart.json'),
@@ -412,10 +412,17 @@ function Home({}) {
     }
 
     let last = null;
-    function tapCallback(event, data) {
-        if (data.point[0] === last) {
+    function tapCallback(event, data, mapInstance) {
+        // console.log(data.point[0])
+        // fix for tapping same data twice
+        let mouse = d3.mouse(mapInstance.container.node());
+        let latLong = mapInstance.geo.utils.projection.invert(mouse);
+        let point = mapInstance.rendererArrangedReveresd[0].getPoint(latLong, mouse, 0);
+
+        if (data.point[0] === last && point) {
             return goToStatePage(event, data);
         }
+
         last = data.point[0];
         window.d3.event.allowDefault = true;
     }
