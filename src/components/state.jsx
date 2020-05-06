@@ -10,6 +10,7 @@ import {getFormattedTestingData} from '../utils/format-test';
 import TrendGraph from './trend-chart';
 import {clone, IS_MOBILE_DEVICE, timeDifference} from '../utils/common-utils';
 import Chart from './Chart';
+import {Helmet} from 'react-helmet';
 
 const d3 = window.d3;
 
@@ -183,99 +184,115 @@ function State({}) {
     }
 
     return (
-        <div className="container">
-            {spinner && (
-                <div className="flex items-center justify-center fixed h-screen w-full z-10" style={{left: 0, top: 0}}>
-                    <div className="lds-dual-ring"></div>
-                </div>
-            )}
-            {fetched && (
-                <div className="opacity-0 my-6 fade-in">
-                    <div className="flex flex-wrap justify-center">
-                        <div className="w-full md:w-40 md:mx-10 pb-4">
-                            <div className="w-full md:w-40 font-bold cursor-pointer flex pb-6 text-xs text-gray-600 items-center">
-                                <Link to={'/'}>Home</Link> <span className="px-1">/</span>
-                                <select
-                                    onChange={changeStatePage}
-                                    defaultValue={stateCode}
-                                    name="states"
-                                    className="bg-gray-200 font-bold appearance-none py-1 px-2 state-select"
-                                >
-                                    {statesKeys.map((key) => {
-                                        return (
-                                            <option value={key} key={key}>
-                                                {STATE_CODES[key]}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </div>
+        <React.Fragment>
+            <Helmet>
+                <title>Coronavirus Outbreak in {STATE_CODES[stateCode]} - covid19india.org</title>
+                <meta
+                    name="title"
+                    content={`Coronavirus Outbreak in ${STATE_CODES[stateCode]}: Latest Map and Case Count`}
+                />
+                <meta
+                    name="description"
+                    content={`Live statistics of Coronavirus (COVID-19) in ${STATE_CODES[stateCode]} - India. Track the confirmed cases, recovered patients, and death toll of India due to the COVID-19 coronavirus.`}
+                />
+            </Helmet>
+            <div className="container">
+                {spinner && (
+                    <div
+                        className="flex items-center justify-center fixed h-screen w-full z-10"
+                        style={{left: 0, top: 0}}
+                    >
+                        <div className="lds-dual-ring"></div>
+                    </div>
+                )}
+                {fetched && (
+                    <div className="opacity-0 my-6 fade-in">
+                        <div className="flex flex-wrap justify-center">
+                            <div className="w-full md:w-40 md:mx-10 pb-4">
+                                <div className="w-full md:w-40 font-bold cursor-pointer flex pb-6 text-xs text-gray-600 items-center">
+                                    <Link to={'/'}>Home</Link> <span className="px-1">/</span>
+                                    <select
+                                        onChange={changeStatePage}
+                                        defaultValue={stateCode}
+                                        name="states"
+                                        className="bg-gray-200 font-bold appearance-none py-1 px-2 state-select"
+                                    >
+                                        {statesKeys.map((key) => {
+                                            return (
+                                                <option value={key} key={key}>
+                                                    {STATE_CODES[key]}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </div>
 
-                            <div className="my-6">
-                                <h1 className="font-extra-bold text-primary text-3xl">{stateName}</h1>
-                                <div className="text-sm text-gray-700 font-bold">Last updated on {updatedTime}</div>
-                            </div>
+                                <div className="my-6">
+                                    <h1 className="font-extra-bold text-primary text-3xl">{stateName}</h1>
+                                    <div className="text-sm text-gray-700 font-bold">Last updated on {updatedTime}</div>
+                                </div>
 
-                            <div className="w-full fade-in">
-                                <DisplayCard ref={childRef} cards={displayCards} count={2000} />
+                                <div className="w-full fade-in">
+                                    <DisplayCard ref={childRef} cards={displayCards} count={2000} />
+                                </div>
+                                <div className={`w-full my-6 ${fetched ? 'fade-in anim-delay-1' : ''}`}>
+                                    <Table rows={tableData.rows} columns={tableData.columns} />
+                                </div>
                             </div>
-                            <div className={`w-full my-6 ${fetched ? 'fade-in anim-delay-1' : ''}`}>
-                                <Table rows={tableData.rows} columns={tableData.columns} />
+                            <div className="w-full md:w-40 md:mx-10 pb-4">
+                                <div className="">
+                                    <div className="flex justify-between fade-in anim-delay-2">
+                                        <div className="text-blue-600 items-center justify-center p-2">
+                                            <div className="text-xs py-1">
+                                                Tested <span className="font-bold">{testingData.label}</span>
+                                            </div>
+                                            <div className="text-xl font-bold">{testingData.tested}</div>
+                                            {testingData.date}
+                                        </div>
+                                        <div className="text-blue-600 items-center justify-center text-right p-2">
+                                            <div className="text-xs py-1">
+                                                Population{' '}
+                                                <a
+                                                    rel="noopener"
+                                                    target="_blank"
+                                                    className="bg-blue-100"
+                                                    href={PUPULATION_SOURCE}
+                                                >
+                                                    2019
+                                                </a>
+                                            </div>
+                                            <div className="text-sm font-bold">{testingData.population}</div>
+                                            <div className="text-sm font-bold">
+                                                {testingData.test_per_million} tests / million people
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="fade-in opacity-0  anim-delay-2 py-4">
+                                        <Map
+                                            initCardData={mapInitData}
+                                            stateCode={stateCode}
+                                            seriesPoints={districtData}
+                                            joinBy={'district'}
+                                            cards={['confirmed', 'active', 'recovered', 'dead']}
+                                            zones={zones}
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div className="w-full md:w-40 md:mx-10 pb-4">
-                            <div className="">
-                                <div className="flex justify-between fade-in anim-delay-2">
-                                    <div className="text-blue-600 items-center justify-center p-2">
-                                        <div className="text-xs py-1">
-                                            Tested <span className="font-bold">{testingData.label}</span>
-                                        </div>
-                                        <div className="text-xl font-bold">{testingData.tested}</div>
-                                        {testingData.date}
-                                    </div>
-                                    <div className="text-blue-600 items-center justify-center text-right p-2">
-                                        <div className="text-xs py-1">
-                                            Population{' '}
-                                            <a
-                                                rel="noopener"
-                                                target="_blank"
-                                                className="bg-blue-100"
-                                                href={PUPULATION_SOURCE}
-                                            >
-                                                2019
-                                            </a>
-                                        </div>
-                                        <div className="text-sm font-bold">{testingData.population}</div>
-                                        <div className="text-sm font-bold">
-                                            {testingData.test_per_million} tests / million people
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="fade-in opacity-0  anim-delay-2 py-4">
-                                    <Map
-                                        initCardData={mapInitData}
-                                        stateCode={stateCode}
-                                        seriesPoints={districtData}
-                                        joinBy={'district'}
-                                        cards={['confirmed', 'active', 'recovered', 'dead']}
-                                        zones={zones}
-                                    />
-                                </div>
+                        <div className="flex flex-wrap justify-center">
+                            <div className="w-full md:w-40 md:mx-10 state-bar border my-6">
+                                {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
+                            </div>
+
+                            <div className="w-full md:w-40 md:mx-10 border my-6" style={{height: '400px'}}>
+                                <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-wrap justify-center">
-                        <div className="w-full md:w-40 md:mx-10 state-bar border my-6">
-                            {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
-                        </div>
-
-                        <div className="w-full md:w-40 md:mx-10 border my-6" style={{height: '400px'}}>
-                            <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </React.Fragment>
     );
 }
 
