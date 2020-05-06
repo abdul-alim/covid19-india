@@ -7,7 +7,7 @@ import {POPULATION, PUPULATION_SOURCE} from '../constants/population';
 import {getFormattedTestingData} from '../utils/format-test';
 import Chart from './Chart';
 import {dailyTrend} from '../charts/daily';
-import {clone, IS_MOBILE_DEVICE, toCapitalize, toFixedNumber} from '../utils/common-utils';
+import {clone, IS_MOBILE_DEVICE, timeDifference, toCapitalize, toFixedNumber} from '../utils/common-utils';
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
 const d3 = window.d3;
@@ -32,6 +32,7 @@ function Home({}) {
     const history = useHistory();
     const childRef = useRef();
     const [chartStore, updateChartStore] = useState({});
+    const [lastUpdated, setLastUpdated] = useState('-');
     const [spinner, setSpinner] = useState(true);
 
     const getCards = (total = {}, today = {}) => {
@@ -83,6 +84,19 @@ function Home({}) {
 
             setSpinner(false);
             setData(reports);
+
+            // time updated
+            {
+                let updatedTime = new Date(reports.updatedTime);
+                setLastUpdated(
+                    `${timeDifference(new Date(), updatedTime)} - ${d3.timeFormat('%B %d, %I:%M %p')(
+                        new Date(updatedTime)
+                    )}`
+                );
+            }
+
+            // let a = d3.timeFormat('%B %d, %I:%M %p')(new Date(reports.updatedTime));
+            // console.log(a);
 
             let totalPopulation = d3.sum(Object.values(POPULATION));
 
@@ -497,6 +511,30 @@ function Home({}) {
                     <h1 className="font-bold mb-8 text-center md:text-2xl text-xl">Live Covid-19 statistcs - India</h1>
                     <div className="flex flex-wrap justify-center">
                         <div className="w-full md:w-40 md:mx-10 pb-4">
+                            <div className="flex justify-between text-primary font-bold items-center my-2">
+                                <div>
+                                    <span>Share: </span>
+                                    <a
+                                        rel="noopener"
+                                        target="_blank"
+                                        href="https://www.facebook.com/sharer/sharer.php?u=https://www.track-covid19.in/server/covid-app/&amp;title=Live COVID-19 Tracker | India"
+                                        className="fb bg-center bg-contain bg-no-repeat px-2 ml-1"
+                                    ></a>
+                                    <a
+                                        className="tweet bg-center bg-contain bg-no-repeat px-2 ml-1"
+                                        rel="noopener"
+                                        target="_blank"
+                                        href="https://twitter.com/intent/tweet?text=Live%20COVID-19%20Tracker%20%7C%20India%20%0AURL%3A%20https%3A%2F%2Fwww.track-covid19.in%2Fserver%2Fcovid-app%2F"
+                                    ></a>
+                                </div>
+                                <div className="text-right text-xs mb-2">
+                                    <h2 className="">Last Updated</h2>
+                                    <h2 id="lastUpdated" className="capitalize">
+                                        {lastUpdated}
+                                    </h2>
+                                </div>
+                            </div>
+
                             <div className="w-full fade-in mb-4" style={animationDelay(1)}>
                                 <DisplayCard ref={childRef} cards={displayCards} count={2000} />
                             </div>

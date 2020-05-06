@@ -80,6 +80,9 @@ function Table(props) {
                                 count = (
                                     <Link to={`/state/${row.stateCode}`}>
                                         {count}
+                                        <span className="ml-1 text-gray-600">
+                                            <Arrow rotate={-90} />
+                                        </span>
                                     </Link>
                                 );
                             }
@@ -103,7 +106,7 @@ function Table(props) {
                                             ''
                                         )}
                                     </span>
-                                    <span className="text-sm">{count}</span>
+                                    <span className="text-xs">{count}</span>
                                 </td>
                             );
                         })}
