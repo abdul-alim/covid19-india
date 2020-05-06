@@ -8,6 +8,7 @@ import State from './components/state';
 import './styles/styles.css';
 import ScrollToTop from './utils/scroll-top';
 import {Helmet} from 'react-helmet';
+import Analytics from 'react-router-ga';
 
 function App() {
     const pages = [
@@ -47,26 +48,30 @@ function App() {
             </Helmet>
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <ScrollToTop />
-                <Route
-                    render={({location}) => (
-                        <div className="Routing">
-                            <Navbar pages={pages} />
-                            <Switch location={location}>
-                                {pages.map((page, index) => {
-                                    return (
-                                        <Route
-                                            exact
-                                            path={page.pageLink}
-                                            render={({match}) => <page.view key={match.params.stateCode || index} />}
-                                            key={index}
-                                        />
-                                    );
-                                })}
-                                <Redirect to="/" />
-                            </Switch>
-                        </div>
-                    )}
-                />
+                <Analytics id="UA-165660871-1">
+                    <Route
+                        render={({location}) => (
+                            <div className="Routing">
+                                <Navbar pages={pages} />
+                                <Switch location={location}>
+                                    {pages.map((page, index) => {
+                                        return (
+                                            <Route
+                                                exact
+                                                path={page.pageLink}
+                                                render={({match}) => (
+                                                    <page.view key={match.params.stateCode || index} />
+                                                )}
+                                                key={index}
+                                            />
+                                        );
+                                    })}
+                                    <Redirect to="/" />
+                                </Switch>
+                            </div>
+                        )}
+                    />
+                </Analytics>
             </BrowserRouter>
         </div>
     );

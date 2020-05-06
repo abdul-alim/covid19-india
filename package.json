@@ -12,7 +12,8 @@
         "react-router-dom": "^5.1.2",
         "react-router-transition": "^2.0.0",
         "axios": "^0.19.2",
-        "react-helmet": "^6.0.0"
+        "react-helmet": "^6.0.0",
+        "react-router-ga": "^1.2.3"
     },
     "scripts": {
         "start": "react-scripts start",
