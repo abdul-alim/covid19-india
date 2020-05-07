@@ -8,9 +8,11 @@ import {STATE_CODES} from '../constants/state-code';
 import {POPULATION, PUPULATION_SOURCE} from '../constants/population.js';
 import {getFormattedTestingData} from '../utils/format-test';
 import TrendGraph from './trend-chart';
-import {clone, IS_MOBILE_DEVICE, timeDifference} from '../utils/common-utils';
+import {IS_MOBILE_DEVICE, shareTheApp} from '../utils/common-utils';
 import Chart from './Chart';
 import {Helmet} from 'react-helmet';
+import {Button} from '@material-ui/core';
+import ShareIcon from '@material-ui/icons/Share';
 
 const d3 = window.d3;
 
@@ -186,7 +188,7 @@ function State({}) {
     return (
         <React.Fragment>
             <Helmet>
-                <title>Coronavirus Outbreak in {STATE_CODES[stateCode]} - covid19india.org</title>
+                <title>Coronavirus Outbreak in {STATE_CODES[stateCode]} - track-covid19.in</title>
                 <meta
                     name="title"
                     content={`Coronavirus Outbreak in ${STATE_CODES[stateCode]}: Latest Map and Case Count`}
@@ -227,9 +229,23 @@ function State({}) {
                                     </select>
                                 </div>
 
-                                <div className="my-6">
-                                    <h1 className="font-extra-bold text-primary text-3xl">{stateName}</h1>
-                                    <div className="text-sm text-gray-700 font-bold">Last updated on {updatedTime}</div>
+                                <div className="flex justify-between text-primary font-bold items-center my-6">
+                                    <div>
+                                        <h1 className="font-extra-bold text-primary text-3xl">{stateName}</h1>
+                                        <div className="text-sm text-gray-700 font-bold">
+                                            Last updated on {updatedTime}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <Button
+                                            onClick={shareTheApp}
+                                            color="primary"
+                                            className="bg-primary"
+                                            endIcon={<ShareIcon />}
+                                        >
+                                            Share
+                                        </Button>
+                                    </div>
                                 </div>
 
                                 <div className="w-full fade-in">
@@ -243,9 +259,7 @@ function State({}) {
                                 <div className="">
                                     <div className="flex justify-between fade-in anim-delay-2">
                                         <div className="text-blue-600 items-center justify-center p-2">
-                                            <div className="text-xs py-1">
-                                                Tested <span className="font-bold">{testingData.label}</span>
-                                            </div>
+                                            <div className="text-xs py-1">Tested</div>
                                             <div className="text-xl font-bold">{testingData.tested}</div>
                                             {testingData.date}
                                         </div>

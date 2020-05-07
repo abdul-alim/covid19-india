@@ -144,7 +144,8 @@ ul {
     padding: 0;
 }
 
-html {
+html,
+.MuiButton-root {
     font-family: Avenir, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
         Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     line-height: 1.1;
@@ -454,8 +455,6 @@ img {
 .hidden {
     display: none;
 }
-
-
 
 .flex-row {
     -webkit-box-orient: horizontal;

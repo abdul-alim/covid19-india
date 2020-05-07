@@ -7,9 +7,13 @@ import {POPULATION, PUPULATION_SOURCE} from '../constants/population';
 import {getFormattedTestingData} from '../utils/format-test';
 import Chart from './Chart';
 import {dailyTrend} from '../charts/daily';
-import {clone, IS_MOBILE_DEVICE, timeDifference, toCapitalize, toFixedNumber} from '../utils/common-utils';
+import {clone, IS_MOBILE_DEVICE, shareTheApp, timeDifference, toCapitalize, toFixedNumber} from '../utils/common-utils';
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
+import {Helmet} from 'react-helmet';
+import {Button} from '@material-ui/core';
+import ShareIcon from '@material-ui/icons/Share';
+
 const d3 = window.d3;
 const IS_DESKTOP = !IS_MOBILE_DEVICE;
 
@@ -458,6 +462,14 @@ function Home({}) {
     function getMapAndTable() {
         return (
             <React.Fragment>
+                <Helmet>
+                    <title>Coronavirus Outbreak in India - track-covid19.in</title>
+                    <meta name="title" content="Coronavirus Outbreak in India}: Latest Map and Case Count" />
+                    <meta
+                        name="description"
+                        content={`Live statistics of Coronavirus (COVID-19) in India. Track the confirmed cases, recovered patients, and death toll of India due to the COVID-19 coronavirus.`}
+                    />
+                </Helmet>
                 <div className="flex justify-between fade-in my-6" style={animationDelay(2)}>
                     <div className="text-blue-600 items-center justify-center">
                         <div className="text-xs py-1">
@@ -512,20 +524,15 @@ function Home({}) {
                     <div className="flex flex-wrap justify-center">
                         <div className="w-full md:w-40 md:mx-10 pb-4">
                             <div className="flex justify-between text-primary font-bold items-center my-2">
-                                <div>
-                                    <span>Share: </span>
-                                    <a
-                                        rel="noopener"
-                                        target="_blank"
-                                        href="https://www.facebook.com/sharer/sharer.php?u=https://www.track-covid19.in/server/covid-app/&amp;title=Live COVID-19 Tracker | India"
-                                        className="fb bg-center bg-contain bg-no-repeat px-2 ml-1"
-                                    ></a>
-                                    <a
-                                        className="tweet bg-center bg-contain bg-no-repeat px-2 ml-1"
-                                        rel="noopener"
-                                        target="_blank"
-                                        href="https://twitter.com/intent/tweet?text=Live%20COVID-19%20Tracker%20%7C%20India%20%0AURL%3A%20https%3A%2F%2Fwww.track-covid19.in%2Fserver%2Fcovid-app%2F"
-                                    ></a>
+                                <div className="flex">
+                                    <Button
+                                        onClick={shareTheApp}
+                                        color="primary"
+                                        className="bg-primary"
+                                        endIcon={<ShareIcon />}
+                                    >
+                                        Share
+                                    </Button>
                                 </div>
                                 <div className="text-right text-xs mb-2">
                                     <h2 className="">Last Updated</h2>

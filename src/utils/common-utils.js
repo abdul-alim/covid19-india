@@ -78,3 +78,47 @@ export function clone(json) {
 }
 
 export const IS_MOBILE_DEVICE = window.innerWidth < 769;
+
+/**
+ *
+ * @param url
+ * @param message
+ * @return {Window}
+ */
+function shareURL(url, message) {
+    const shareUri = `https://www.addtoany.com/share#url=${encodeURI(url)}&title=${encodeURI(message)}`;
+    const h = 500;
+    const w = 500;
+    const left = window.screen.width / 2 - w / 2;
+    const top = window.screen.height / 2 - h / 2;
+    return window.open(
+        shareUri,
+        document.title,
+        'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' +
+            w +
+            ', height=' +
+            h +
+            ', top=' +
+            top +
+            ', left=' +
+            left
+    );
+}
+
+export function shareTheApp() {
+    const message = document.title,
+        url = window.location.href;
+
+    if (navigator.share !== undefined) {
+        navigator
+            .share({
+                title: message,
+                text: message,
+                url: url,
+            })
+            .then()
+            .catch((error) => {});
+    } else {
+        shareURL(url, message);
+    }
+}
