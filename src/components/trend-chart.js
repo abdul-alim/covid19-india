@@ -3,6 +3,9 @@ import Chart from './Chart';
 import {dailyTrend} from '../charts/daily';
 import {toCapitalize} from '../utils/common-utils';
 
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 /**
  *
  * @return {*}
@@ -46,34 +49,18 @@ function TrendGraph(props) {
      * @param event
      */
     function updateDailyChartScaleMode(event) {
+        let checked = event.target.checked;
+        setScaleState({...scaleState, [event.target.name]: checked});
         let chart = chartStore.daily;
-        let scaleMode = event.target.value;
+        let scaleMode = checked ? 'log' : 'linear';
+
         chart.userdata.chart.axes.yaxis[0].scaleType = scaleMode;
         if (scaleMode === 'log') {
             setDailyChartMode('cumulative');
-            ref.current.setAttribute('disabled', true);
-            ref.current.parentElement.classList.add('text-gray-600');
-        } else {
-            ref.current.removeAttribute('disabled');
-            ref.current.parentElement.classList.remove('text-gray-600');
-        }
-        updateDailyChartCumulative(null, scaleMode);
-    }
-
-    /**
-     *
-     * @param event
-     */
-    function updateDailyChartCumulative(event, type) {
-        let cumulativeL = type || event.target.value === 'cumulative';
-        setCumulative(cumulativeL)
-
-        if (!type) {
-            setDailyChartMode(event.target.value);
+            setCumulativeMode({...cumulativeMode, checked: false});
         }
 
-        let chart = chartStore.daily;
-        let {series, minRange} = getTrendSeries(cumulativeL, trendTime[timeFrame]);
+        let {series, minRange} = getTrendSeries(true, trendTime[timeFrame]);
         series.forEach((s, i) => {
             chart.userdata.seriesdata.chartdata[i].data = s;
         });
@@ -81,11 +68,30 @@ function TrendGraph(props) {
         chart.redraw();
     }
 
-    function updateTimeFrame(event) {
-        let timeF = event.target.value;
-        setTimeFrame(timeF);
+    /**
+     *
+     * @param event
+     */
+    function updateDailyChartCumulative(event) {
+        let cumulative = event.target.checked === false;
+        setCumulative(cumulative);
+
+        setCumulativeMode({...cumulativeMode, checked: !cumulative});
+        setScaleState({...scaleState, checked: false});
+
         let chart = chartStore.daily;
-        let {series, minRange} = getTrendSeries(cumulative, trendTime[timeF]);
+        let {series, minRange} = getTrendSeries(cumulative, trendTime[timeFrame]);
+        series.forEach((s, i) => {
+            chart.userdata.seriesdata.chartdata[i].data = s;
+        });
+        chart.userdata.chart.axes.xaxis.minRange = minRange;
+        chart.redraw();
+    }
+
+    function updateTimeFrame(frame) {
+        setTimeFrame(frame);
+        let chart = chartStore.daily;
+        let {series, minRange} = getTrendSeries(cumulative, trendTime[frame]);
         series.forEach((s, i) => {
             chart.userdata.seriesdata.chartdata[i].data = s;
         });
@@ -99,53 +105,94 @@ function TrendGraph(props) {
             chartJson.seriesdata.chartdata[i] = {data: series, seriesname: toCapitalize(seriesNames[i])};
         });
         chartJson.chart.axes.xaxis.minRange = minRange;
+        chartJson.canvas.title.show = false;
     }
+
+    const [scaleState, setScaleState] = React.useState({checked: false});
+    const [cumulativeMode, setCumulativeMode] = React.useState({checked: false});
+
+    // const handleChange2 = (event) => {
+    //     setScaleState({...scaleState, [event.target.name]: event.target.checked});
+    // };
 
     return (
         <React.Fragment>
-            <div className="flex flex-auto z-10 my-2 items-center justify-center">
-                <label className="flex items-center justify-center  text-sm mr-2">
-                    <span>Scale</span>
-                    <select
-                        id="scale-mode"
-                        className="bg-gray-200 text-left font-bold ml-1 rounded w-full flex"
-                        defaultValue="linear"
-                        onChange={updateDailyChartScaleMode}
-                    >
-                        <option value="linear">Linear</option>
-                        <option value="log">Log</option>
-                    </select>
-                </label>
-                <label className="flex items-center justify-center  text-sm ">
-                    <span>Mode: </span>
-                    <select
-                        id="trend-mode"
-                        className="bg-gray-200 text-left font-bold ml-1 rounded w-full flex"
-                        value={dailyChartMode}
-                        onChange={updateDailyChartCumulative}
-                        ref={ref}
-                    >
-                        <option value="cumulative">Cumulative</option>
-                        <option value="daily">Daily</option>
-                    </select>
-                </label>
-                <label className="flex items-center justify-center  text-sm ml-1 ">
-                    <span>Time: </span>
-                    <select
-                        id="trend-time"
-                        className="bg-gray-200 text-left font-bold ml-1 rounded w-full flex"
-                        defaultValue={timeFrame}
-                        onChange={updateTimeFrame}
-                    >
-                        <option value="1week">1 Week</option>
-                        <option value="2week">2 Weeks</option>
-                        <option value="month">1 Month</option>
-                        <option value="all">Beginning</option>
-                    </select>
-                </label>
+            <h2 className="ml-3 mt-4">Daily Trend</h2>
+            <div className="ml-3 flex mt-2">
+                <div className="flex items-center ">
+                    <span className="mr-2">Scale</span>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                size="small"
+                                checked={scaleState.checked}
+                                onChange={updateDailyChartScaleMode}
+                                name="checked"
+                                color="primary"
+                            />
+                        }
+                        label="Logarithmic"
+                    />
+                </div>
+                <div className="flex items-center ">
+                    <span className="mr-2">Mode</span>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                disabled={scaleState.checked}
+                                size="small"
+                                checked={cumulativeMode.checked}
+                                onChange={updateDailyChartCumulative}
+                                name="checked"
+                                color="primary"
+                            />
+                        }
+                        label="Daily"
+                    />
+                </div>
             </div>
             <div className="trend-graph">
                 <Chart seriesData={chartJson} name="daily" callback={chartCallback} />
+            </div>
+            <div className="flex flex-auto z-10 my-4 items-center justify-end">
+                <div className="button-group text-sm mr-4">
+                    <button
+                        type="button"
+                        onClick={() => updateTimeFrame('all')}
+                        className={`${
+                            timeFrame === 'all' ? 'selected' : ''
+                        } text-2xs px-4 py-2 font-extra-bold no-outline`}
+                    >
+                        Beginning
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => updateTimeFrame('month')}
+                        className={`${
+                            timeFrame === 'month' ? 'selected' : ''
+                        } text-2xs px-4 py-2 font-extra-bold no-outline`}
+                    >
+                        Month
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => updateTimeFrame('2week')}
+                        className={`${
+                            timeFrame === '2week' ? 'selected' : ''
+                        } text-2xs px-4 py-2 font-extra-bold no-outline`}
+                    >
+                        2 Weeks
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => updateTimeFrame('1week')}
+                        className={`${
+                            timeFrame === '1week' ? 'selected' : ''
+                        } text-2xs px-4 py-2 font-extra-bold no-outline`}
+                    >
+                        1 Week
+                    </button>
+                </div>
             </div>
         </React.Fragment>
     );

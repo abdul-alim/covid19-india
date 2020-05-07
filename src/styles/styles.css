@@ -1437,6 +1437,14 @@ nav {
     border-radius: 2px;
 }
 
+.no-outline {
+    outline: none;
+}
+
+.no-outline:focus {
+    outline: none;
+}
+
 .opacity-0 {
     opacity: 0;
 }
@@ -1495,4 +1503,28 @@ nav {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.button-group > button {
+    background-color: rgba(88, 106, 206, 0.1);
+    border-bottom: 0;
+    border-top: 0;
+    color: #586ace;
+    transition: all ease 0.5s;
+}
+
+.button-group > button:first-of-type {
+    border: 0;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.button-group > button:last-of-type {
+    border: 0;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.button-group > button.selected {
+    background-color: rgba(88, 106, 206, 0.2);
 }
