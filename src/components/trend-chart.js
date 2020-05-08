@@ -34,6 +34,21 @@ function TrendGraph(props) {
         updateChartStore(chartStore);
     }
 
+    function updateCallback() {
+        let chart = chartStore.daily,
+            scaleMode = scaleState.checked ? 'log' : 'linear',
+            cumulative = cumulativeMode.checked === false;
+
+        chart.userdata.chart.axes.yaxis[0].scaleType = scaleMode;
+        let {series, minRange} = getTrendSeries(cumulative, trendTime[timeFrame]);
+
+        series.forEach((s, i) => {
+            chart.userdata.seriesdata.chartdata[i].data = s;
+        });
+        chart.userdata.chart.axes.xaxis.minRange = minRange;
+        chart.redraw();
+    }
+
     function getTrendSeries(cumulative, count) {
         // create the graph data
         let seriesNames = ['confirmed', 'active', 'recovered', 'dead'];
@@ -51,21 +66,7 @@ function TrendGraph(props) {
     function updateDailyChartScaleMode(event) {
         let checked = event.target.checked;
         setScaleState({...scaleState, [event.target.name]: checked});
-        let chart = chartStore.daily;
-        let scaleMode = checked ? 'log' : 'linear';
-
-        chart.userdata.chart.axes.yaxis[0].scaleType = scaleMode;
-        if (scaleMode === 'log') {
-            setDailyChartMode('cumulative');
-            setCumulativeMode({...cumulativeMode, checked: false});
-        }
-
-        let {series, minRange} = getTrendSeries(true, trendTime[timeFrame]);
-        series.forEach((s, i) => {
-            chart.userdata.seriesdata.chartdata[i].data = s;
-        });
-        chart.userdata.chart.axes.xaxis.minRange = minRange;
-        chart.redraw();
+        setCumulativeMode({...cumulativeMode, checked: false});
     }
 
     /**
@@ -78,28 +79,13 @@ function TrendGraph(props) {
 
         setCumulativeMode({...cumulativeMode, checked: !cumulative});
         setScaleState({...scaleState, checked: false});
-
-        let chart = chartStore.daily;
-        let {series, minRange} = getTrendSeries(cumulative, trendTime[timeFrame]);
-        series.forEach((s, i) => {
-            chart.userdata.seriesdata.chartdata[i].data = s;
-        });
-        chart.userdata.chart.axes.xaxis.minRange = minRange;
-        chart.redraw();
     }
 
     function updateTimeFrame(frame) {
         setTimeFrame(frame);
-        let chart = chartStore.daily;
-        let {series, minRange} = getTrendSeries(cumulative, trendTime[frame]);
-        series.forEach((s, i) => {
-            chart.userdata.seriesdata.chartdata[i].data = s;
-        });
-        chart.userdata.chart.axes.xaxis.minRange = minRange;
-        chart.redraw();
     }
 
-    if (history.length) {
+    if (history.length && !chartStore.daily) {
         let {series, minRange} = getTrendSeries(true, trendTime[timeFrame]);
         series.forEach((series, i) => {
             chartJson.seriesdata.chartdata[i] = {data: series, seriesname: toCapitalize(seriesNames[i])};
@@ -110,10 +96,6 @@ function TrendGraph(props) {
 
     const [scaleState, setScaleState] = React.useState({checked: false});
     const [cumulativeMode, setCumulativeMode] = React.useState({checked: false});
-
-    // const handleChange2 = (event) => {
-    //     setScaleState({...scaleState, [event.target.name]: event.target.checked});
-    // };
 
     return (
         <React.Fragment>
@@ -152,7 +134,7 @@ function TrendGraph(props) {
                 </div>
             </div>
             <div className="trend-graph">
-                <Chart seriesData={chartJson} name="daily" callback={chartCallback} />
+                <Chart seriesData={chartJson} name="daily" callback={chartCallback} updateCallback={updateCallback} />
             </div>
             <div className="flex flex-auto z-10 my-4 items-center justify-end">
                 <div className="button-group text-sm mr-4">

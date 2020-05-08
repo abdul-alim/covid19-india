@@ -147,21 +147,20 @@ class Map extends React.Component {
             };
 
             this.map = window.$ZC.maps(this.myDiv, mapData);
-            window.chart = this.map;
         }
     }
 
     callback(card, i) {
         let colorMap = ['#e84b36', '#f88658', '#007e1a', '#2f2f2f'];
-        
+
         this.map.userdata.legend.colors = [...this.mapExtents[card.name].colors];
         this.map.userdata.legend.colorBand.stops = [0, this.mapExtents[card.name].count];
-    
+
         this.map.userdata.legend.colorBand.ranges = null;
         this.map.userdata.legend.filter.enabled = false;
         this.map.userdata.metadata.axes.clr = [i + 1];
         this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = colorMap[i];
-        this.map.eventHandler.mapEvents.clearHighlightedPoints()
+        this.map.eventHandler.mapEvents.clearHighlightedPoints();
         this.map.redraw();
     }
 
@@ -172,15 +171,14 @@ class Map extends React.Component {
         if (event.target.name === 'zone') {
             this.map.userdata.legend.colors = ['#ff1100', '#f88658', '#009688'];
             this.map.userdata.legend.colorBand.ranges = [['Red Zone'], ['Orange Zone'], ['Green Zone']];
-            this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = "#ddd";
+            this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = '#ddd';
             this.map.userdata.legend.filter.enabled = true;
             this.map.userdata.metadata.axes.clr = [5];
-            this.map.eventHandler.mapEvents.clearHighlightedPoints()
+            this.map.eventHandler.mapEvents.clearHighlightedPoints();
             this.map.redraw();
         } else {
-            this.callback({name: this.props.cards[0]}, 0)
+            this.callback({name: this.props.cards[0]}, 0);
         }
-        
     }
 
     render() {

@@ -6,14 +6,20 @@ class Chart extends React.Component {
         this.child = React.createRef();
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         let {seriesData, name, callback} = this.props;
 
         if (this.myDiv) {
-            let chart = window.$ZC.charts(this.myDiv, seriesData);
+            let chart = this.chart = window.$ZC.charts(this.myDiv, seriesData);
             if (callback) {
                 callback(chart, name);
             }
+        }
+    }
+    
+    componentDidUpdate() {
+        if (this.props.updateCallback) {
+            this.props.updateCallback(this.chart, this.props.name)
         }
     }
 

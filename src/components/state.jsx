@@ -295,7 +295,7 @@ function State({}) {
                             </div>
                         </div>
                         <div className="flex flex-wrap justify-center">
-                            <div className="w-full md:w-40 md:mx-10 state-bar border my-6">
+                            <div className="w-full md:w-40 md:mx-10 border my-6">
                                 {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
                             </div>
 
