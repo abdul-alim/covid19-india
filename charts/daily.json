@@ -17,9 +17,9 @@
                 "datatype": "time",
                 "time": {
                     "subfunction": "ABSDAY",
-                    "inputformat": "DD MM YYYY",
+                    "inputformat": "MMM dd, YYYY",
                     "format": {
-                        "specifier": "dd MMM YYYY"
+                        "specifier": "MMM dd YYYY"
                     }
                 },
                 "columnindex": 0
