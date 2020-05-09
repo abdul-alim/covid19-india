@@ -13,6 +13,7 @@ import Chart from './Chart';
 import {Helmet} from 'react-helmet';
 import {Button} from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
+import MetaCard from './meta-card';
 
 const d3 = window.d3;
 
@@ -86,13 +87,13 @@ function State({}) {
                 {data: state_data},
                 {data: dailyChart},
                 {data: percentChartJson},
-                {data: zones},
+                {data: zonesV2},
             ] = await Promise.all([
                 axios.get('https://api.track-corona.in/district_v2.json'),
                 axios.get('https://api.track-corona.in/reports_v2.json'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/percent-chart.json'),
-                axios.get('/data/zones.json'),
+                axios.get('https://api.track-corona.in/zones.json'),
             ]);
 
             // hide spinner
@@ -168,7 +169,9 @@ function State({}) {
                 }
             }
 
-            setZones(zones[stateCode]);
+            let zoneV2 = zonesV2[stateCode].map((row) => [row.district, `${row.zone} Zone`]);
+
+            setZones(zoneV2);
 
             setFetched(true);
         } catch (err) {
@@ -247,7 +250,6 @@ function State({}) {
                                         </Button>
                                     </div>
                                 </div>
-
                                 <div className="w-full fade-in">
                                     <DisplayCard ref={childRef} cards={displayCards} count={2000} />
                                 </div>
@@ -291,16 +293,19 @@ function State({}) {
                                             zones={zones}
                                         />
                                     </div>
+                                    <div className="w-full fade-in">
+                                        <MetaCard history={caseHistory} tests={testingData} report={mapInitData} />
+                                    </div>
+    
+                                    <div className="w-full border my-6">
+                                        {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
+                                    </div>
+    
+                                    <div className="w-full border my-6" style={{height: '400px'}}>
+                                        <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
+                                    </div>
+                                    
                                 </div>
-                            </div>
-                        </div>
-                        <div className="flex flex-wrap justify-center">
-                            <div className="w-full md:w-40 md:mx-10 border my-6">
-                                {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
-                            </div>
-
-                            <div className="w-full md:w-40 md:mx-10 border my-6" style={{height: '400px'}}>
-                                <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
                             </div>
                         </div>
                     </div>

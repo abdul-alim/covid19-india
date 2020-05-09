@@ -24,6 +24,8 @@ export function getFormattedTestingData(testing_data, totalPopulation, label) {
     );
 
     return {
+        populationNumeric: totalPopulation,
+        testedNumeric: testing_data.tested,
         tested: testing_data.tested.toLocaleString(),
         date: dateString,
         population: totalPopulation.toLocaleString(),

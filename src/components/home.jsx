@@ -13,6 +13,7 @@ import {useHistory} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
 import {Button} from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
+import MetaCard from './meta-card';
 
 const d3 = window.d3;
 const IS_DESKTOP = !IS_MOBILE_DEVICE;
@@ -23,6 +24,7 @@ function Home({}) {
     const [tableData, setTableData] = useState({rows: [], columns: []});
     const [mapInitData, setMapInitData] = useState({});
     const [testingData, setTestingData] = useState({});
+    const [metaCardPopulation, setMetaCardPopulation] = useState({});
     const [stateDataMapped, setStateDataMapped] = useState({});
     const [dailyChart, setDailyChart] = useState(null);
     const [stateStackedChart, setStateStackedChart] = useState({});
@@ -106,6 +108,7 @@ function Home({}) {
 
             let testingData = getFormattedTestingData(reports.testing_data_imcr, totalPopulation, 'Total');
             setTestingData(testingData);
+            setMetaCardPopulation({...testingData});
 
             setDisplayCards(getCards(reports, reports.today));
 
@@ -547,6 +550,10 @@ function Home({}) {
                             </div>
 
                             {IS_MOBILE_DEVICE && getMapAndTable()}
+
+                            <div className="w-full fade-in" style={animationDelay(2)}>
+                                <MetaCard history={data.history} tests={metaCardPopulation} report={{...mapInitData}} />
+                            </div>
 
                             <div className="w-full fade-in mb-4 border" style={animationDelay(3)}>
                                 <TrendGraph chartJson={dailyChart} history={data.history} />

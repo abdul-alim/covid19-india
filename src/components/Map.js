@@ -7,6 +7,8 @@ class Map extends React.Component {
     constructor(props) {
         super(props);
         this.child = React.createRef();
+        this.selected = props.cards[0];
+        this.mapType = 'affected';
     }
 
     handleMapHover = (data, today) => {
@@ -17,7 +19,8 @@ class Map extends React.Component {
         let {stateCode, seriesPoints: rawPoints, joinBy, zones} = this.props,
             codeLower = stateCode.toLowerCase(),
             scopeCode = `countries-ind-${codeLower}-2`,
-            seriesPoints = [];
+            seriesPoints = [],
+            totalSummery = this.props.initCardData;
 
         this.mapExtents = {
             confirmed: {
@@ -122,6 +125,13 @@ class Map extends React.Component {
                 };
 
                 if (name !== last) {
+                    let total = totalSummery[this.selected] || 0.001,
+                        current = data_callback[this.selected] || 0,
+                        percent = parseFloat(100 * (current / total)).toFixed(2);
+
+                    // add title
+                    this.map.container.attr('title', `${percent}% ${this.selected} from ${data_callback.name}`);
+
                     this.handleMapHover(data_callback, today);
                     last = name;
                 }
@@ -136,6 +146,10 @@ class Map extends React.Component {
 
             mapData.chart.plot.plotoptions.geoheatmap.events = {
                 mousemove: mapAction,
+                mouseout: () => {
+                    this.map.container.attr('title', null);
+                    window.d3.event.allowDefault = true;
+                },
                 tap: (error, data) => {
                     mapAction(error, data);
                     if (tapCallback) {
@@ -155,6 +169,11 @@ class Map extends React.Component {
 
         this.map.userdata.legend.colors = [...this.mapExtents[card.name].colors];
         this.map.userdata.legend.colorBand.stops = [0, this.mapExtents[card.name].count];
+        this.selected = card.name;
+
+        // select the default button
+        d3.selectAll('button').classed('text-primary', false);
+        d3.select('button[name=default]').classed('text-primary', true);
 
         this.map.userdata.legend.colorBand.ranges = null;
         this.map.userdata.legend.filter.enabled = false;
@@ -169,15 +188,16 @@ class Map extends React.Component {
         event.target.classList.add('text-primary');
 
         if (event.target.name === 'zone') {
-            this.map.userdata.legend.colors = ['#ff1100', '#f88658', '#009688'];
+            this.mapType = 'zone';
+            this.map.userdata.legend.colors = ['#EF5350', '#FFA726', '#26A69A'];
             this.map.userdata.legend.colorBand.ranges = [['Red Zone'], ['Orange Zone'], ['Green Zone']];
-            this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = '#ddd';
+            this.map.userdata.chart.plot.plotoptions.geoheatmap.strokeColor = '#333';
             this.map.userdata.legend.filter.enabled = true;
             this.map.userdata.metadata.axes.clr = [5];
             this.map.eventHandler.mapEvents.clearHighlightedPoints();
             this.map.redraw();
         } else {
-            this.callback({name: this.props.cards[0]}, 0);
+            this.callback({name: this.selected}, this.props.cards.indexOf(this.selected));
         }
     }
 

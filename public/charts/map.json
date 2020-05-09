@@ -138,9 +138,17 @@
         }
     },
     "legend": {
+        "fontSize": 14,
+        "marginTop": 10,
         "enabled": true,
         "colorBand": {
             "minRange": 0
+        },
+        "colorAxis": {
+            "minmaxlabels": {
+                "show": true,
+                "excludeIntervals": true
+            }
         },
         "filter": {
             "enabled": false

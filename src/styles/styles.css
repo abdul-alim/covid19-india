@@ -145,11 +145,12 @@ ul {
 }
 
 html,
-.MuiButton-root {
+.MuiButton-root, .global-style {
     font-family: Avenir, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
         Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     line-height: 1.1;
 }
+
 
 *,
 :after,
@@ -616,6 +617,11 @@ img {
     margin-right: auto;
 }
 
+.my-0 {
+    margin-top: 0;
+    margin-bottom: -0;
+}
+
 .-my-2 {
     margin-top: -0.5rem;
     margin-bottom: -0.5rem;
@@ -902,8 +908,16 @@ img {
     color: #718096;
 }
 
+.text-gray-400 {
+    color: #8694aa;
+}
+
 .text-gray-700 {
     color: #4a5568;
+}
+
+.text-red-400 {
+    color: #f34f86;
 }
 
 .text-red-600 {
@@ -914,16 +928,36 @@ img {
     color: #ff9800;
 }
 
+.text-orange-400 {
+    color: #f5aa3c;
+}
+
 .text-green-600 {
     color: #009688;
+}
+
+.text-green-400 {
+    color: #3baa9f;
 }
 
 .text-teal-900 {
     color: #234e52;
 }
 
+.text-brown-400 {
+    color: #c69787;
+}
+
+.text-brown-600 {
+    color: #8d5f4f;
+}
+
 .text-blue-500 {
     color: #4299e1;
+}
+
+.text-blue-400 {
+    color: #6964ca;
 }
 
 .text-blue-600 {
@@ -1527,4 +1561,11 @@ nav {
 
 .button-group > button.selected {
     background-color: rgba(88, 106, 206, 0.2);
+}
+
+.meta-card {
+    align-self: center;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(2,1fr);
 }
