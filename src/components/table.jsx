@@ -97,16 +97,16 @@ function Table(props) {
                                     <span>
                                         {j > 0 && todayCount ? (
                                             <span
-                                                className={` mr-1 text-${colorClass}-600 break-words`}
+                                                className={`text-${colorClass}-600 break-words`}
                                             >
                                                 <Arrow up={todayCount > 0} />
-                                                <span>{todayCount}</span>
+                                                {todayCount}
                                             </span>
                                         ) : (
                                             ''
                                         )}
                                     </span>
-                                    <span className="text-xs">{count}</span>
+                                    <span className="text-xs ml-1">{count}</span>
                                 </td>
                             );
                         })}
