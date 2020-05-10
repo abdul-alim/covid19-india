@@ -9,14 +9,22 @@ import {round} from '../utils/common-utils';
  * @return {*}
  * @constructor
  */
+
+const NaNCheck = (d) => {
+    if (isNaN(d)) {
+        return 0;
+    }
+    return d;
+};
+
 function MetaCard({report, tests, history}) {
     let {populationNumeric: population} = tests;
 
-    let confirmedPerMillion = round((report.confirmed / population) * 1000000, 2);
-    let activePercent = round((report.active / report.confirmed) * 100, 2);
-    let recoveredPercent = round((report.recovered / report.confirmed) * 100, 2);
-    let deathPercent = round((report.dead / report.confirmed) * 100, 2);
-    let testPerMillion = round((tests.testedNumeric / population) * 1000000, 2);
+    let confirmedPerMillion = NaNCheck(round((report.confirmed / population) * 1000000, 2));
+    let activePercent = NaNCheck(round((report.active / report.confirmed) * 100, 2));
+    let recoveredPercent = NaNCheck(round((report.recovered / report.confirmed) * 100, 2));
+    let deathPercent = NaNCheck(round((report.dead / report.confirmed) * 100, 2));
+    let testPerMillion = NaNCheck(round((tests.testedNumeric / population) * 1000000, 2));
 
     // add a sum for total confirmed
     let last = 0;
@@ -25,18 +33,22 @@ function MetaCard({report, tests, history}) {
         last = row.confirmedCumulative;
     });
 
-    let lastWeek = history[history.length - 8],
-        yesterday = history[history.length - 2];
+    let growRatePerWeek = 0,
+        growthDateRange = 0;
 
-    if (history.length < 8) {
-        lastWeek = history[0];
+    if (history.length) {
+        let lastWeek = history[history.length - 8],
+            yesterday = history[history.length - 2];
+
+        if (history.length < 8) {
+            lastWeek = history[0];
+        }
+
+        let growthRate =
+            ((yesterday.confirmedCumulative - lastWeek.confirmedCumulative) / lastWeek.confirmedCumulative) * 100;
+        growRatePerWeek = round(growthRate / 7);
+        growthDateRange = `${lastWeek.date.split(',')[0]} - ${yesterday.date.split(',')[0]}`;
     }
-
-    let growthRate =
-        ((yesterday.confirmedCumulative - lastWeek.confirmedCumulative) / lastWeek.confirmedCumulative) * 100;
-    let growRatePerWeek = round(growthRate / 7);
-    let growthDateRange = `${lastWeek.date.split(',')[0]} - ${yesterday.date.split(',')[0]}`;
-
     // const doublingRate = growthRate > 0 ? 70 / round(growthRate, 2) : 0;
 
     let cards = [

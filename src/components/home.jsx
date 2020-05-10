@@ -39,6 +39,7 @@ function Home({}) {
     const childRef = useRef();
     const [chartStore, updateChartStore] = useState({});
     const [lastUpdated, setLastUpdated] = useState('-');
+    const [caseHistory, setCaseHistory] = useState({});
     const [spinner, setSpinner] = useState(true);
 
     const getCards = (total = {}, today = {}) => {
@@ -81,8 +82,17 @@ function Home({}) {
 
     const getData = async () => {
         try {
-            let [{data: reports}, {data: dailyChart}, {data: stateBar}, {data: percentChartJson}] = await Promise.all([
+            let [
+                {data: reports},
+                {
+                    data: {india: indiaHistory, state: stateHistory},
+                },
+                {data: dailyChart},
+                {data: stateBar},
+                {data: percentChartJson},
+            ] = await Promise.all([
                 axios.get('https://api.track-corona.in/reports_v2.json'),
+                axios.get('https://api.track-corona.in/history.json'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/states.json'),
                 axios.get('/charts/percent-chart.json'),
@@ -90,10 +100,14 @@ function Home({}) {
 
             setSpinner(false);
             setData(reports);
+            setCaseHistory({india: indiaHistory, state: stateHistory});
 
             // time updated
             {
-                let updatedTime = new Date(reports.updatedTime);
+                // 10/05/2020 14:34:22
+                let parseTime = d3.timeParse('%d/%m/%Y %H:%M:%S');
+                let updatedTime = parseTime(reports.updatedTime);
+
                 setLastUpdated(
                     `${timeDifference(new Date(), updatedTime)} - ${d3.timeFormat('%B %d, %I:%M %p')(
                         new Date(updatedTime)
@@ -294,7 +308,7 @@ function Home({}) {
                 let march1 = new Date(2020, 1, 29);
 
                 let data = states.slice(0, 15).map((state) => {
-                    let history = state.history.filter((row) => {
+                    let history = stateHistory[state.stateCode].filter((row) => {
                         return parseTime(row.date) > march1;
                     });
 
@@ -320,7 +334,7 @@ function Home({}) {
                 });
 
                 let data = states.slice(0, 20).map((state) => {
-                    let data = dailyTrend(state.history, '$index', ['confirmed'], true)[0];
+                    let data = dailyTrend(stateHistory[state.stateCode], '$index', ['confirmed'], true)[0];
                     return {
                         seriesname: state.name,
                         type: 'line',
@@ -551,19 +565,23 @@ function Home({}) {
 
                             {IS_MOBILE_DEVICE && getMapAndTable()}
 
-                            <div className="w-full fade-in" style={animationDelay(2)}>
-                                <MetaCard history={data.history} tests={metaCardPopulation} report={{...mapInitData}} />
+                            <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
+                                <TrendGraph chartJson={dailyChart} history={caseHistory.india} />
                             </div>
-
-                            <div className="w-full fade-in mb-4 border" style={animationDelay(3)}>
-                                <TrendGraph chartJson={dailyChart} history={data.history} />
-                            </div>
-
-                            <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(5)}>
-                                <Chart seriesData={stateCases} name="state_cases" callback={chartCallback} />
+    
+                            <div className="w-full fade-in" style={animationDelay(3)}>
+                                <MetaCard
+                                  history={caseHistory.india}
+                                  tests={metaCardPopulation}
+                                  report={{...mapInitData}}
+                                />
                             </div>
 
                             <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(4)}>
+                                <Chart seriesData={stateCases} name="state_cases" callback={chartCallback} />
+                            </div>
+
+                            <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(5)}>
                                 <Chart seriesData={growthRateChart} name="growth" callback={chartCallback} />
                             </div>
 

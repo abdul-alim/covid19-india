@@ -8,7 +8,7 @@ import {STATE_CODES} from '../constants/state-code';
 import {POPULATION, PUPULATION_SOURCE} from '../constants/population.js';
 import {getFormattedTestingData} from '../utils/format-test';
 import TrendGraph from './trend-chart';
-import {IS_MOBILE_DEVICE, shareTheApp} from '../utils/common-utils';
+import {IS_MOBILE_DEVICE, shareTheApp, timeDifference} from '../utils/common-utils';
 import Chart from './Chart';
 import {Helmet} from 'react-helmet';
 import {Button} from '@material-ui/core';
@@ -85,15 +85,19 @@ function State({}) {
             let [
                 {data: district_data},
                 {data: state_data},
-                {data: dailyChart},
-                {data: percentChartJson},
+                {
+                    data: {state: history},
+                },
                 {data: zonesV2},
+                {data: dailyChart},
+                {data: percentChartJson}
             ] = await Promise.all([
                 axios.get('https://api.track-corona.in/district_v2.json'),
                 axios.get('https://api.track-corona.in/reports_v2.json'),
-                axios.get('/charts/daily.json'),
-                axios.get('/charts/percent-chart.json'),
+                axios.get('https://api.track-corona.in/history.json'),
                 axios.get('https://api.track-corona.in/zones.json'),
+                axios.get('/charts/daily.json'),
+                axios.get('/charts/percent-chart.json')
             ]);
 
             // hide spinner
@@ -105,7 +109,10 @@ function State({}) {
             let state_population = POPULATION[stateCode];
 
             var formatTime = d3.timeFormat('%B %d, %I:%M%p IST');
-            setUpdatedTime(districtInfo.updatedTime ? formatTime(new Date(districtInfo.updatedTime)) : '-');
+            let parseTime = d3.timeParse('%d/%m/%Y %H:%M:%S');
+            let updatedTime = parseTime(stateInfo.updatedTime);
+            setUpdatedTime(`${timeDifference(new Date(), updatedTime)} - ${formatTime(new Date(updatedTime))}`);
+            
 
             let testingData = getFormattedTestingData(testing_data, state_population, districtInfo.state);
             setTestingData(testingData);
@@ -151,8 +158,8 @@ function State({}) {
             });
 
             setDailyChart(dailyChart);
-            if (stateInfo.history) {
-                setCaseHistory(stateInfo.history);
+            if (history[stateCode]) {
+                setCaseHistory(history[stateCode]);
             }
 
             {
@@ -235,8 +242,11 @@ function State({}) {
                                 <div className="flex justify-between text-primary font-bold items-center my-6">
                                     <div>
                                         <h1 className="font-extra-bold text-primary text-3xl">{stateName}</h1>
-                                        <div className="text-sm text-gray-700 font-bold">
-                                            Last updated on {updatedTime}
+                                        <div className="text-xs text-gray-700 font-bold">
+                                            <h2 className="">Last Updated</h2>
+                                            <h2 id="lastUpdated" className="capitalize">
+                                                {updatedTime}
+                                            </h2>
                                         </div>
                                     </div>
                                     <div>
@@ -296,15 +306,14 @@ function State({}) {
                                     <div className="w-full fade-in">
                                         <MetaCard history={caseHistory} tests={testingData} report={mapInitData} />
                                     </div>
-    
+
                                     <div className="w-full border my-6">
                                         {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
                                     </div>
-    
+
                                     <div className="w-full border my-6" style={{height: '400px'}}>
                                         <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
