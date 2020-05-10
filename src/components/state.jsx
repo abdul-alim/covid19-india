@@ -92,10 +92,10 @@ function State({}) {
                 {data: dailyChart},
                 {data: percentChartJson}
             ] = await Promise.all([
-                axios.get('https://api.track-corona.in/district_v2.json'),
-                axios.get('https://api.track-corona.in/reports_v2.json'),
-                axios.get('https://api.track-corona.in/history.json'),
-                axios.get('https://api.track-corona.in/zones.json'),
+                axios.get('https://api.track-covid19.in/district_v2.json'),
+                axios.get('https://api.track-covid19.in/reports_v2.json'),
+                axios.get('https://api.track-covid19.in/history.json'),
+                axios.get('https://api.track-covid19.in/zones.json'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/percent-chart.json')
             ]);
