@@ -38,7 +38,7 @@ function App() {
         name: 'Coronavirus Outbreak in India: Latest Map and Case Count',
         alternateName: 'COVID-19 Tracker',
         url: 'https://track-covid-19.in',
-        image: 'https://track-covid19.in/thumbnail.png',
+        image: 'https://www.track-covid19.in/thumbnail.png',
     };
 
     return (
