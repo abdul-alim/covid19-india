@@ -77,7 +77,8 @@ export function clone(json) {
     return JSON.parse(JSON.stringify(json));
 }
 
-export const IS_MOBILE_DEVICE = window.innerWidth < 1620;
+export const IS_MOBILE_DEVICE = window.innerWidth < 769;
+export const IS_SINGLE_COLUMN = window.innerWidth < 1620;
 
 /**
  *

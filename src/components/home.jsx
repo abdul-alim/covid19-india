@@ -9,13 +9,13 @@ import Chart from './Chart';
 import {dailyTrend} from '../charts/daily';
 import {
     clone,
-    IS_MOBILE_DEVICE,
+    IS_MOBILE_DEVICE, IS_SINGLE_COLUMN,
     isTouchDevice,
     shareTheApp,
     timeDifference,
     toCapitalize,
-    toFixedNumber,
-} from '../utils/common-utils';
+    toFixedNumber
+} from "../utils/common-utils";
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
@@ -580,7 +580,7 @@ function Home({}) {
                                     <DisplayCard ref={childRef} cards={displayCards} count={2000} />
                                 </div>
 
-                                {IS_MOBILE_DEVICE && getMapAndTable()}
+                                {IS_SINGLE_COLUMN && getMapAndTable()}
 
                                 <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
                                     <TrendGraph chartJson={dailyChart} history={caseHistory.india} />

@@ -14,7 +14,7 @@ function Navbar({pages}) {
         <nav className="flex items-center flex-wrap bg-white text-primary py-2">
             <div className="container py-2 px-2 items-center font-bold text-lg">
                 <div className="w-full flex items-center justify-between -my-2">
-                    <div className="flex items-center cursor-pointer lg:flex">
+                    <NavLink exact={true} to='/' className="flex items-center cursor-pointer lg:flex">
                         <img
                             src="/images/covid.svg"
                             alt="logo"
@@ -26,7 +26,7 @@ function Navbar({pages}) {
                                 Live
                             </span>
                         </div>
-                    </div>
+                    </NavLink>
                     <div className="flex ml-auto mr-1">
                         {pages.map((page, i) => {
                             if (page.showInNavbar === true) {
