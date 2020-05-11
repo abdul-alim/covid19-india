@@ -90,14 +90,14 @@ function State({}) {
                 },
                 {data: zonesV2},
                 {data: dailyChart},
-                {data: percentChartJson}
+                {data: percentChartJson},
             ] = await Promise.all([
                 axios.get('https://api.track-covid19.in/district_v2.json'),
                 axios.get('https://api.track-covid19.in/reports_v2.json'),
                 axios.get('https://api.track-covid19.in/history.json'),
                 axios.get('https://api.track-covid19.in/zones.json'),
                 axios.get('/charts/daily.json'),
-                axios.get('/charts/percent-chart.json')
+                axios.get('/charts/percent-chart.json'),
             ]);
 
             // hide spinner
@@ -112,10 +112,20 @@ function State({}) {
             let parseTime = d3.timeParse('%d/%m/%Y %H:%M:%S');
             let updatedTime = parseTime(stateInfo.updatedTime);
             setUpdatedTime(`${timeDifference(new Date(), updatedTime)} - ${formatTime(new Date(updatedTime))}`);
-            
 
             let testingData = getFormattedTestingData(testing_data, state_population, districtInfo.state);
             setTestingData(testingData);
+
+            // fix the negative deaths and
+            districtInfo.districts.forEach((district) => {
+                let {today} = district;
+                if (today) {
+                    today.confirmed = Math.max(0, today.confirmed);
+                    today.recovered = Math.max(0, today.recovered);
+                    today.dead = Math.max(0, today.dead);
+                    today.active = today.confirmed - today.recovered - today.dead;
+                }
+            });
 
             setDisplayCards(getCards(stateInfo, stateInfo.today));
             setDistrictData(districtInfo.districts);

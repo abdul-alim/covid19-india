@@ -14,8 +14,8 @@ import {
     shareTheApp,
     timeDifference,
     toCapitalize,
-    toFixedNumber
-} from "../utils/common-utils";
+    toFixedNumber,
+} from '../utils/common-utils';
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
@@ -487,17 +487,11 @@ function Home({}) {
     function getMapAndTable() {
         return (
             <React.Fragment>
-                <Helmet>
-                    <title>Coronavirus Outbreak in India - track-covid19.in</title>
-                    <meta name="title" content="Coronavirus Outbreak in India}: Latest Map and Case Count" />
-                    <meta
-                        name="description"
-                        content={`Live statistics of Coronavirus (COVID-19) in India. Track the confirmed cases, recovered patients, and death toll of India due to the COVID-19 coronavirus.`}
-                    />
-                </Helmet>
-                <div className='font-bold my-8 text-center text-gray-700 opacity-0 fade-in' style={animationDelay(2)}>
+                <div className="font-bold my-8 text-center text-gray-700 opacity-0 fade-in" style={animationDelay(2)}>
                     <h1 className="text-2xl font-extra-bold">Live Covid-19 Case Map - India</h1>
-                    <h2 className="text-xs">{isTouchDevice() ? 'Tap/Double Tap': 'Hover/Click'} on the map for more information</h2>
+                    <h2 className="text-xs">
+                        {isTouchDevice() ? 'Tap/Double Tap' : 'Hover/Click'} on the map for more information
+                    </h2>
                 </div>
                 <div className="flex justify-between fade-in my-6" style={animationDelay(2)}>
                     <div className="text-blue-600 items-center justify-center">
@@ -541,95 +535,121 @@ function Home({}) {
     }
 
     return (
-        <div className={'container'}>
-            {spinner && (
-                <div className="flex items-center justify-center fixed h-screen w-full z-10" style={{left: 0, top: 0}}>
-                    <div className="lds-dual-ring"></div>
-                </div>
-            )}
-            {fetched && (
-                <div className="opacity-0 my-8 fade-in">
-                    <div className="flex flex-wrap justify-center">
-                        <div className="w-full md:w-40 md:mx-10 pb-4">
-                            <div className="flex justify-between text-primary font-bold items-center my-2">
-                                <div className="flex">
-                                    <Button
-                                        onClick={shareTheApp}
-                                        color="primary"
-                                        className="bg-primary"
-                                        endIcon={<ShareIcon />}
-                                    >
-                                        Share
-                                    </Button>
+        <React.Fragment>
+            <Helmet>
+                <title>Coronavirus Outbreak in India - track-covid19.in</title>
+                <meta name="title" content="Coronavirus Outbreak in India}: Latest Map and Case Count" />
+                <meta
+                    name="description"
+                    content={`Live statistics of Coronavirus (COVID-19) in India. Track the confirmed cases, recovered patients, and death toll of India due to the COVID-19 coronavirus.`}
+                />
+            </Helmet>
+            <div className={'container'}>
+                {spinner && (
+                    <div
+                        className="flex items-center justify-center fixed h-screen w-full z-10"
+                        style={{left: 0, top: 0}}
+                    >
+                        <div className="lds-dual-ring"></div>
+                    </div>
+                )}
+                {fetched && (
+                    <div className="opacity-0 my-8 fade-in">
+                        <div className="flex flex-wrap justify-center">
+                            <div className="w-full md:w-40 md:mx-10 pb-4">
+                                <div className="flex justify-between text-primary font-bold items-center my-2">
+                                    <div className="flex">
+                                        <Button
+                                            onClick={shareTheApp}
+                                            color="primary"
+                                            className="bg-primary"
+                                            endIcon={<ShareIcon />}
+                                        >
+                                            Share
+                                        </Button>
+                                    </div>
+                                    <div className="text-right text-xs mb-2">
+                                        <h2 className="">Last Updated</h2>
+                                        <h2 id="lastUpdated" className="capitalize">
+                                            {lastUpdated}
+                                        </h2>
+                                    </div>
                                 </div>
-                                <div className="text-right text-xs mb-2">
-                                    <h2 className="">Last Updated</h2>
-                                    <h2 id="lastUpdated" className="capitalize">
-                                        {lastUpdated}
-                                    </h2>
+
+                                <div className="w-full fade-in mb-4" style={animationDelay(1)}>
+                                    <DisplayCard ref={childRef} cards={displayCards} count={2000} />
+                                </div>
+
+                                {IS_MOBILE_DEVICE && getMapAndTable()}
+
+                                <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
+                                    <TrendGraph chartJson={dailyChart} history={caseHistory.india} />
+                                </div>
+
+                                <div className="w-full fade-in" style={animationDelay(3)}>
+                                    <MetaCard
+                                        history={caseHistory.india}
+                                        tests={metaCardPopulation}
+                                        report={{...mapInitData}}
+                                    />
+                                </div>
+
+                                <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(4)}>
+                                    <Chart seriesData={stateCases} name="state_cases" callback={chartCallback} />
+                                </div>
+
+                                <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(5)}>
+                                    <Chart seriesData={growthRateChart} name="growth" callback={chartCallback} />
+                                </div>
+
+                                <div
+                                    className="w-full fade-in md:w-40 mb-4 percent-chart border"
+                                    style={animationDelay(6)}
+                                >
+                                    <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
+                                </div>
+
+                                <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(7)}>
+                                    <Chart seriesData={wordcloudChart} name="wordcloud" callback={chartCallback} />
+                                </div>
+                                <div className="w-full md:w-40 mb-4 state-bar border fade-in" style={animationDelay(9)}>
+                                    <Chart seriesData={stateStackedChart} name="stacked" callback={chartCallback} />
                                 </div>
                             </div>
+                            <div className="w-full md:w-40 md:mx-10">
+                                {IS_DESKTOP && getMapAndTable()}
 
-                            <div className="w-full fade-in mb-4" style={animationDelay(1)}>
-                                <DisplayCard ref={childRef} cards={displayCards} count={2000} />
-                            </div>
+                                <div
+                                    className="w-full md:w-40 mb-4 state-bar border fade-in"
+                                    style={animationDelay(11)}
+                                >
+                                    <Chart
+                                        seriesData={recoveryTrendChart}
+                                        name="recovery_trend"
+                                        callback={chartCallback}
+                                    />
+                                </div>
 
-                            {IS_MOBILE_DEVICE && getMapAndTable()}
+                                <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(8)}>
+                                    <Chart
+                                        seriesData={deathTrendTotalChart}
+                                        name="recovery_trend"
+                                        callback={chartCallback}
+                                    />
+                                </div>
 
-                            <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
-                                <TrendGraph chartJson={dailyChart} history={caseHistory.india} />
-                            </div>
-    
-                            <div className="w-full fade-in" style={animationDelay(3)}>
-                                <MetaCard
-                                  history={caseHistory.india}
-                                  tests={metaCardPopulation}
-                                  report={{...mapInitData}}
-                                />
-                            </div>
-
-                            <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(4)}>
-                                <Chart seriesData={stateCases} name="state_cases" callback={chartCallback} />
-                            </div>
-
-                            <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(5)}>
-                                <Chart seriesData={growthRateChart} name="growth" callback={chartCallback} />
-                            </div>
-
-                            <div className="w-full fade-in md:w-40 mb-4 percent-chart border" style={animationDelay(6)}>
-                                <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
-                            </div>
-
-                            <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(7)}>
-                                <Chart seriesData={wordcloudChart} name="wordcloud" callback={chartCallback} />
-                            </div>
-                            <div className="w-full md:w-40 mb-4 state-bar border fade-in" style={animationDelay(9)}>
-                                <Chart seriesData={stateStackedChart} name="stacked" callback={chartCallback} />
-                            </div>
-                        </div>
-                        <div className="w-full md:w-40 md:mx-10">
-                            {IS_DESKTOP && getMapAndTable()}
-
-                            <div className="w-full md:w-40 mb-4 state-bar border fade-in" style={animationDelay(11)}>
-                                <Chart seriesData={recoveryTrendChart} name="recovery_trend" callback={chartCallback} />
-                            </div>
-
-                            <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(8)}>
-                                <Chart
-                                    seriesData={deathTrendTotalChart}
-                                    name="recovery_trend"
-                                    callback={chartCallback}
-                                />
-                            </div>
-
-                            <div className="w-full md:w-40 mb-4 state-bar border fade-in" style={animationDelay(10)}>
-                                <Chart seriesData={deathTrendChart} name="death_trend" callback={chartCallback} />
+                                <div
+                                    className="w-full md:w-40 mb-4 state-bar border fade-in"
+                                    style={animationDelay(10)}
+                                >
+                                    <Chart seriesData={deathTrendChart} name="death_trend" callback={chartCallback} />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </React.Fragment>
     );
 }
 
