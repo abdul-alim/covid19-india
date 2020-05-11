@@ -7,7 +7,15 @@ import {POPULATION, PUPULATION_SOURCE} from '../constants/population';
 import {getFormattedTestingData} from '../utils/format-test';
 import Chart from './Chart';
 import {dailyTrend} from '../charts/daily';
-import {clone, IS_MOBILE_DEVICE, shareTheApp, timeDifference, toCapitalize, toFixedNumber} from '../utils/common-utils';
+import {
+    clone,
+    IS_MOBILE_DEVICE,
+    isTouchDevice,
+    shareTheApp,
+    timeDifference,
+    toCapitalize,
+    toFixedNumber
+} from "../utils/common-utils";
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
@@ -487,6 +495,10 @@ function Home({}) {
                         content={`Live statistics of Coronavirus (COVID-19) in India. Track the confirmed cases, recovered patients, and death toll of India due to the COVID-19 coronavirus.`}
                     />
                 </Helmet>
+                <div className='font-bold my-8 text-center text-gray-700 opacity-0 fade-in' style={animationDelay(2)}>
+                    <h1 className="text-2xl font-extra-bold">Live Covid-19 Case Map - India</h1>
+                    <h2 className="text-xs">{isTouchDevice() ? 'Tap/Double Tap': 'Hover/Click'} on the map for more information</h2>
+                </div>
                 <div className="flex justify-between fade-in my-6" style={animationDelay(2)}>
                     <div className="text-blue-600 items-center justify-center">
                         <div className="text-xs py-1">
@@ -536,8 +548,7 @@ function Home({}) {
                 </div>
             )}
             {fetched && (
-                <div className="opacity-0 my-2 fade-in">
-                    <h1 className="font-bold mb-8 text-center md:text-2xl text-xl">Live Covid-19 statistcs - India</h1>
+                <div className="opacity-0 my-8 fade-in">
                     <div className="flex flex-wrap justify-center">
                         <div className="w-full md:w-40 md:mx-10 pb-4">
                             <div className="flex justify-between text-primary font-bold items-center my-2">

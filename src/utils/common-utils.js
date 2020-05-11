@@ -77,7 +77,7 @@ export function clone(json) {
     return JSON.parse(JSON.stringify(json));
 }
 
-export const IS_MOBILE_DEVICE = window.innerWidth < 769;
+export const IS_MOBILE_DEVICE = window.innerWidth < 1620;
 
 /**
  *
@@ -126,4 +126,8 @@ export function shareTheApp() {
 export function round(value, precision) {
     var multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
+}
+
+export function isTouchDevice() {
+    return window.ontouchstart !== undefined;
 }
