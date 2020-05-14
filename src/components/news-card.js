@@ -1,5 +1,6 @@
-import React from 'react';
-import {timeDifference} from '../utils/common-utils';
+import React from "react";
+import { timeDifference } from "../utils/common-utils";
+
 const icons = [
         'bangaloremirror',
         'firstspot',
@@ -24,6 +25,9 @@ const icons = [
         'gadgetsnow',
         'mumbaimirror',
         'thenewsminute',
+        'republicworld',
+        'cnn',
+        'khaleejtimes'
     ],
     regex = new RegExp(icons.join('|')),
     styles = {overflow: 'hidden', wordBreak: 'break-word'};
