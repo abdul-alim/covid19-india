@@ -18,7 +18,7 @@ function TrendGraph(props) {
     const [chartStore, updateChartStore] = useState({});
     const [dailyChartMode, setDailyChartMode] = useState('cumulative');
 
-    const [timeFrame, setTimeFrame] = useState('month');
+    const [timeFrame, setTimeFrame] = useState('all');
     const [cumulative, setCumulative] = useState(true);
 
     let trendTime = {'1week': 7, '2week': 14, month: 30},

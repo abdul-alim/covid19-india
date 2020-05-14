@@ -101,6 +101,7 @@
         "plot": {
             "plotoptions": {
                 "line": {
+                    "mode": "monotone",
                     "stacked": {
                         "enabled": false,
                         "outerPadding": 0

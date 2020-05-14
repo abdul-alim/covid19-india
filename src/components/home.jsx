@@ -102,6 +102,7 @@ function Home({}) {
                 {data: stateBar},
                 {data: percentChartJson},
                 {data: news},
+                {data: tests},
             ] = await Promise.all([
                 axios.get('https://api.track-covid19.in/reports_v2.json'),
                 axios.get('https://api.track-covid19.in/history.json'),
@@ -109,6 +110,7 @@ function Home({}) {
                 axios.get('/charts/states.json'),
                 axios.get('/charts/percent-chart.json'),
                 axios.get('https://jsonstorage.net/api/items/72baa701-75d5-4069-89f3-573c4a4bb3e3'),
+                axios.get('https://api.track-covid19.in/tests.json'),
             ]);
 
             setSpinner(false);
@@ -129,8 +131,15 @@ function Home({}) {
                 );
             }
 
-            // let a = d3.timeFormat('%B %d, %I:%M %p')(new Date(reports.updatedTime));
-            // console.log(a);
+            // set the testing value temporary
+            for (var stateCode in reports.states) {
+                if (reports.states.hasOwnProperty(stateCode)) {
+                    if (tests.states[stateCode]) {
+                        let stateTestHistory = tests.states[stateCode];
+                        reports.states[stateCode].testing_data = stateTestHistory[stateTestHistory.length - 1];
+                    }
+                }
+            }
 
             let totalPopulation = d3.sum(Object.values(POPULATION));
 
