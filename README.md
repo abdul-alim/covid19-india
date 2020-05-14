@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://track-corona.in/thumbnail.png" width="100%">
+<img src="https://www.track-covid19.in/thumbnail.png" width="100%">
 </p>
 
 <p align="center">
