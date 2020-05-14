@@ -95,7 +95,7 @@ function Table(props) {
                                     >
                                         <span>
                                             {j > 0 && todayCount ? (
-                                                <span className={`text-${colorClass}-600 break-words`}>
+                                                <span className={`text-${colorClass}-600 inline-block`}>
                                                     <Arrow up={todayCount > 0} />
                                                     {todayCount}
                                                 </span>

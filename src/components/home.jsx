@@ -9,19 +9,21 @@ import Chart from './Chart';
 import {dailyTrend} from '../charts/daily';
 import {
     clone,
-    IS_MOBILE_DEVICE, IS_SINGLE_COLUMN,
+    IS_MOBILE_DEVICE,
+    IS_SINGLE_COLUMN,
     isTouchDevice,
     shareTheApp,
     timeDifference,
     toCapitalize,
-    toFixedNumber
-} from "../utils/common-utils";
+    toFixedNumber,
+} from '../utils/common-utils';
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
 import {Helmet} from 'react-helmet';
 import {Button} from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
 import MetaCard from './meta-card';
+import NewsCard from './news-card';
 
 const d3 = window.d3;
 const IS_DESKTOP = !IS_MOBILE_DEVICE;
@@ -49,6 +51,7 @@ function Home({}) {
     const [lastUpdated, setLastUpdated] = useState('-');
     const [caseHistory, setCaseHistory] = useState({});
     const [spinner, setSpinner] = useState(true);
+    const [articles, setArticles] = useState(true);
 
     const getCards = (total = {}, today = {}) => {
         return [
@@ -98,17 +101,20 @@ function Home({}) {
                 {data: dailyChart},
                 {data: stateBar},
                 {data: percentChartJson},
+                {data: news},
             ] = await Promise.all([
                 axios.get('https://api.track-covid19.in/reports_v2.json'),
                 axios.get('https://api.track-covid19.in/history.json'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/states.json'),
                 axios.get('/charts/percent-chart.json'),
+                axios.get('https://jsonstorage.net/api/items/72baa701-75d5-4069-89f3-573c4a4bb3e3'),
             ]);
 
             setSpinner(false);
             setData(reports);
             setCaseHistory({india: indiaHistory, state: stateHistory});
+            setArticles(news);
 
             // time updated
             {
@@ -544,7 +550,7 @@ function Home({}) {
                     content={`Live statistics of Coronavirus (COVID-19) in India. Track the confirmed cases, recovered patients, and death toll of India due to the COVID-19 coronavirus.`}
                 />
             </Helmet>
-            <div className={'container'}>
+            <div className="container">
                 {spinner && (
                     <div
                         className="flex items-center justify-center fixed h-screen w-full z-10"
@@ -617,7 +623,7 @@ function Home({}) {
                                 </div>
                             </div>
                             <div className="w-full md:w-40 md:mx-10">
-                                {IS_DESKTOP && getMapAndTable()}
+                                {!IS_SINGLE_COLUMN && getMapAndTable()}
 
                                 <div
                                     className="w-full md:w-40 mb-4 state-bar border fade-in"
@@ -644,6 +650,18 @@ function Home({}) {
                                 >
                                     <Chart seriesData={deathTrendChart} name="death_trend" callback={chartCallback} />
                                 </div>
+                            </div>
+                            <div className="w-full md:w-40 md:mx-10 my-8">
+                                <h2 className="border-l-2 border-primary text-primary font-bold p-2 uppercase text-xl">
+                                    Top Headlines
+                                </h2>
+                                <NewsCard articles={articles.headlines.articles} />
+                            </div>
+                            <div className="w-full md:w-40 md:mx-10 my-8">
+                                <h2 className="border-l-2 border-primary text-primary font-bold p-2 uppercase text-xl">
+                                    Top News
+                                </h2>
+                                <NewsCard articles={articles.news.articles} />
                             </div>
                         </div>
                     </div>

@@ -3,9 +3,9 @@ var covid_theme = function () {
         canvas: {
             fontColor: 'black',
             fontFamily: 'Avenir, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif',
-            fontSize: 16,
+            fontSize: 14,
             title: {
-                fontSize: 16,
+                fontSize: 14,
             },
             subtitle: {
                 show: false,

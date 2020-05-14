@@ -19,7 +19,7 @@
                     "subfunction": "ABSDAY",
                     "inputformat": "MMM dd, YYYY",
                     "format": {
-                        "specifier": "MMM dd YYYY"
+                        "specifier": "MMM dd"
                     }
                 },
                 "columnindex": 0
@@ -40,21 +40,28 @@
         ]
     },
     "chart": {
-        "marginRight": 20,
+        "marginRight": 30,
+        "marginLeft": 30,
         "axes": {
             "xaxis": {
                 "label": {
                     "text": ""
                 },
                 "ticklabel": {
-                    "alignMode": "rotate(90)"
+                    "fontSize": 10,
+                    "alignMode": "rotate(0)"
                 },
                 "axisline": {
-                    "show": false
+                    "show": true,
+                    "color": "#999"
+                },
+                "tickmark": {
+                    "size": 5,
+                    "color": "#999"
                 },
                 "grid": {
                     "color": "#F5F5F5",
-                    "show": true,
+                    "show": false,
                     "strokeWidth": 1
                 },
                 "threshold": {
@@ -65,7 +72,7 @@
                         "label": {
                             "text": ["Lockdown 1", "Lockdown 2", "Lockdown 3"],
                             "hAlign": "center",
-                            "fontSize": "12",
+                            "fontSize": "10",
                             "fontColor": "#673AB7",
                             "fontWeight": "bold"
                         }
@@ -79,11 +86,10 @@
                     },
                     "orient": "right",
                     "axisline": {
-                        "show": false
+                        "show": false,
+                        "color": "#333"
                     },
                     "grid": {
-                        "color": "#F5F5F5",
-                        "show": true,
                         "strokeWidth": 1
                     },
                     "padding": 5,
