@@ -135,6 +135,34 @@ function State({}) {
                 }
             });
 
+            // find out the unknowns
+            {
+                let districts = districtInfo.districts.filter((d) => d.district !== 'Unknown');
+                let totalKnownConfirmed = d3.sum(districts, (district) => district.confirmed),
+                    totalKnownRecovered = d3.sum(districts, (district) => district.recovered),
+                    totalKnownDeaths = d3.sum(districts, (district) => district.dead);
+
+                let unknowns = {
+                    district: 'Unknown',
+                    confirmed: stateInfo.confirmed - totalKnownConfirmed,
+                    recovered: stateInfo.recovered - totalKnownRecovered,
+                    dead: stateInfo.dead - totalKnownDeaths,
+                };
+                unknowns.active = unknowns.confirmed - unknowns.recovered - unknowns.dead;
+                districts.push(unknowns);
+                districtInfo.districts = districts;
+            }
+
+            {
+                let {today} = stateInfo;
+                if (today) {
+                    today.confirmed = Math.max(0, today.confirmed);
+                    today.recovered = Math.max(0, today.recovered);
+                    today.dead = Math.max(0, today.dead);
+                    today.active = today.confirmed - today.recovered - today.dead;
+                }
+            }
+            
             setDisplayCards(getCards(stateInfo, stateInfo.today));
             setDistrictData(districtInfo.districts);
 
