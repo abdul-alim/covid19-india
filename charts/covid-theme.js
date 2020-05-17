@@ -10,7 +10,7 @@ var covid_theme = function () {
             subtitle: {
                 show: false,
                 fontSize: 14,
-                fontCOlor: '#111',
+                fontColor: '#999',
             },
             shadow: {
                 show: false,
