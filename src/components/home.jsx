@@ -24,6 +24,15 @@ import {Button} from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
 import MetaCard from './meta-card';
 import NewsCard from './news-card';
+import {makeKeyframes} from './race-bar/useKeyframes';
+import RacingBarChart from './race-bar/RacingBarChart';
+import {STATE_CODES} from '../constants/state-code';
+import {COLOR_ARRAY1, COLOR_ARRAY3} from '../constants/colors';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PauseIcon from '@material-ui/icons/Pause';
+import ReplayIcon from '@material-ui/icons/Replay';
+import IconButton from '@material-ui/core/IconButton';
+
 
 const d3 = window.d3;
 const IS_DESKTOP = !IS_MOBILE_DEVICE;
@@ -52,6 +61,7 @@ function Home({}) {
     const [caseHistory, setCaseHistory] = useState({});
     const [spinner, setSpinner] = useState(true);
     const [articles, setArticles] = useState(true);
+    const [keyframes, setKeyFrames] = useState([]);
 
     const getCards = (total = {}, today = {}) => {
         return [
@@ -365,28 +375,6 @@ function Home({}) {
                     };
                 });
 
-                let colors = [
-                    '#f44336',
-                    '#E91E63',
-                    '#9C27B0',
-                    '#673AB7',
-                    '#3F51B5',
-                    '#2196F3',
-                    '#03A9F4',
-                    '#00BCD4',
-                    '#009688',
-                    '#4CAF50',
-                    '#8BC34A',
-                    '#CDDC39',
-                    '#FFEB3B',
-                    '#FFC107',
-                    '#FF9800',
-                    '#FF5722',
-                    '#795548',
-                    '#9E9E9E',
-                    '#607D8B',
-                ];
-
                 let stateCasesChartLog = clone(dailyChart);
                 data.forEach((s, i) => {
                     stateCasesChartLog.seriesdata.chartdata[i] = s;
@@ -408,7 +396,7 @@ function Home({}) {
                     },
                 };
                 stateCasesChartLog.chart.axes.yaxis[0].scaleType = 'log';
-                stateCasesChartLog.legend.colors = colors;
+                stateCasesChartLog.legend.colors = COLOR_ARRAY1;
                 stateCasesChartLog.canvas.title.text = 'Statewise Growth trend';
                 stateCasesChartLog.canvas.subtitle = {text: 'Top 20 States', show: true};
 
@@ -447,6 +435,29 @@ function Home({}) {
                     ],
                 };
                 setPercentChart(percentChartJson);
+            }
+
+            {
+                // build rave bar data
+                Object.entries(stateHistory).forEach(([key, value]) => {
+                    let last = 0;
+                    value.forEach((entry) => {
+                        entry.name = STATE_CODES[key];
+                        entry.value = entry.confirmed + last;
+                        last = entry.value;
+                    });
+                });
+
+                let all = Object.values(stateHistory)
+                    .flat()
+                    .filter((d) => d.name !== undefined);
+
+                all.sort(function (a, b) {
+                    return d3.ascending(new Date(a.date), new Date(b.date));
+                });
+                all = all.slice(90, all.length);
+                const keyframes = makeKeyframes(all, 3);
+                setKeyFrames(keyframes);
             }
 
             //
@@ -549,6 +560,24 @@ function Home({}) {
         );
     }
 
+    //*****************************
+
+    // race bar chart handle
+    let stateCodes = Object.values(STATE_CODES);
+    const chartRef = React.useRef();
+    const handleReplay = () => {
+        chartRef.current.replay();
+    };
+    const handleStart = () => {
+        chartRef.current.start();
+    };
+    const handleStop = () => {
+        chartRef.current.stop();
+    };
+    const playing = chartRef.current ? chartRef.current.playing : false;
+    const [_, forceUpdate] = useState();
+    let parentRef = useRef(null);
+
     return (
         <React.Fragment>
             <Helmet>
@@ -600,6 +629,29 @@ function Home({}) {
                                 <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
                                     <TrendGraph chartJson={dailyChart} history={caseHistory.india} />
                                 </div>
+    
+                                <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
+                                    <h2 className="ml-3 mt-4">Animation Of Top 10 States By Total Confirmed Cases</h2>
+                                    <h2 className="ml-3 my-0 text-sm text-gray-400 mb-2 subtitle-color">Click the play button to animate the chart</h2>
+                                    <div className="race-bar" ref={parentRef}>
+                                        <RacingBarChart
+                                          keyframes={keyframes}
+                                          onStart={() => forceUpdate(true)}
+                                          onStop={() => forceUpdate(false)}
+                                          ref={chartRef}
+                                          parentRef={parentRef}
+                                          categories={stateCodes}
+                                        />
+                                    </div>
+                                    <div style={{marginLeft: 100}} className='my-2'>
+                                        <IconButton aria-label="replay" size="small" onClick={handleReplay}>
+                                            <ReplayIcon />
+                                        </IconButton>
+                                        <IconButton onClick={playing ? handleStop : handleStart} size="small">
+                                            {playing ? <PauseIcon /> : <PlayArrowIcon />}
+                                        </IconButton>
+                                    </div>
+                                </div>
 
                                 <div className="w-full fade-in" style={animationDelay(3)}>
                                     <MetaCard
@@ -627,12 +679,13 @@ function Home({}) {
                                 <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(7)}>
                                     <Chart seriesData={wordcloudChart} name="wordcloud" callback={chartCallback} />
                                 </div>
-                                <div className="w-full md:w-40 mb-4 state-bar border fade-in" style={animationDelay(9)}>
-                                    <Chart seriesData={stateStackedChart} name="stacked" callback={chartCallback} />
-                                </div>
                             </div>
                             <div className="w-full md:w-40 md:mx-10">
                                 {!IS_SINGLE_COLUMN && getMapAndTable()}
+    
+                                <div className="w-full md:w-40 mb-4 state-bar border fade-in" style={animationDelay(9)}>
+                                    <Chart seriesData={stateStackedChart} name="stacked" callback={chartCallback} />
+                                </div>
 
                                 <div
                                     className="w-full md:w-40 mb-4 state-bar border fade-in"

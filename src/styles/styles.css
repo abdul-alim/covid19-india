@@ -1569,3 +1569,17 @@ nav {
     grid-gap: 1rem;
     grid-template-columns: repeat(2,1fr);
 }
+
+.race-bar {
+    height: 400px
+}
+
+
+.race-bar-svg line {
+    shape-rendering: crispEdges;
+    stroke: rgb(153, 153, 153)
+}
+
+.subtitle-color {
+    color: #999;
+}

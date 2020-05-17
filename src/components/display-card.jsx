@@ -43,10 +43,6 @@ const DisplayCard = forwardRef(({count, cards: cc, styles = {}, callback}, ref) 
                             updateActiveCard(card, i);
                             callback(card, i);
                         }}
-                        onTouchStart={() => {
-                            updateActiveCard(card, i);
-                            callback(card, i);
-                        }}
                         key={i}
                         className={`${
                             i ? 'ml-2' : ''

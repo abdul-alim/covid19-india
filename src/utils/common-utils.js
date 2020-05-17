@@ -132,3 +132,34 @@ export function round(value, precision) {
 export function isTouchDevice() {
     return window.ontouchstart !== undefined;
 }
+
+/**
+ *
+ * @param el
+ * @param prop
+ * @param convertToInt
+ * @return {CSSStyleDeclaration|string|number}
+ */
+export function getStyle(el, prop, convertToInt = true) {
+    var style;
+
+    // For width and height, return the actual inner pixel size
+    if (prop === 'width') {
+        return Math.min(el.offsetWidth, el.scrollWidth) - getStyle(el, 'padding-left') - getStyle(el, 'padding-right');
+    } else if (prop === 'height') {
+        return (
+            Math.min(el.offsetHeight, el.scrollHeight) - getStyle(el, 'padding-top') - getStyle(el, 'padding-bottom')
+        );
+    }
+
+    // Otherwise, get the computed style
+    style = window.getComputedStyle(el);
+
+    if (style) {
+        style = style.getPropertyValue(prop);
+        if (convertToInt) {
+            style = parseFloat(style);
+        }
+    }
+    return style;
+}
