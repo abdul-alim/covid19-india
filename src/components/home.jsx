@@ -211,7 +211,7 @@ function Home({}) {
 
             // sort the st
 
-            let states = Object.values(reports.states).filter((state) => state.confirmed > 50);
+            let states = Object.values(reports.states).filter((state) => state.confirmed > 50 && state.stateCode !== 'UN');
 
             // set the factors
             states.forEach((state) => {

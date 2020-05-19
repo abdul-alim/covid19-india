@@ -75,7 +75,7 @@ function Table(props) {
                                 }
 
                                 //
-                                if (props.link && j === 0) {
+                                if (props.link && j === 0 && !row.isUnknown) {
                                     count = (
                                         <Link to={`/state/${row.stateCode}`}>
                                             {count}
