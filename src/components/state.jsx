@@ -1,19 +1,19 @@
-import React, {useEffect, useRef, useState} from 'react';
-import DisplayCard from './display-card';
-import axios from 'axios';
-import Table from './table';
-import Map from './Map';
-import {Link, useHistory, useParams} from 'react-router-dom';
-import {STATE_CODES} from '../constants/state-code';
-import {POPULATION, PUPULATION_SOURCE} from '../constants/population.js';
-import {getFormattedTestingData} from '../utils/format-test';
-import TrendGraph from './trend-chart';
-import {IS_MOBILE_DEVICE, shareTheApp, timeDifference} from '../utils/common-utils';
-import Chart from './Chart';
-import {Helmet} from 'react-helmet';
-import {Button} from '@material-ui/core';
-import ShareIcon from '@material-ui/icons/Share';
-import MetaCard from './meta-card';
+import React, { useEffect, useRef, useState } from "react";
+import DisplayCard from "./display-card";
+import axios from "axios";
+import Table from "./table";
+import Map from "./Map";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { STATE_CODES } from "../constants/state-code";
+import { POPULATION, PUPULATION_SOURCE } from "../constants/population.js";
+import { getFormattedTestingData } from "../utils/format-test";
+import TrendGraph from "./trend-chart";
+import { IS_MOBILE_DEVICE, shareTheApp, timeDifference } from "../utils/common-utils";
+import Chart from "./Chart";
+import { Helmet } from "react-helmet";
+import { Button } from "@material-ui/core";
+import ShareIcon from "@material-ui/icons/Share";
+import MetaCard from "./meta-card";
 
 const d3 = window.d3;
 

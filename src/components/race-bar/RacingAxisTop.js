@@ -1,7 +1,7 @@
-import React, {forwardRef, useRef} from 'react';
-import PropTypes from 'prop-types';
-import {useSpring, animated} from 'react-spring';
-import AxisTop from './AxisTop';
+import React, { forwardRef, useRef } from "react";
+import PropTypes from "prop-types";
+import { animated, useSpring } from "react-spring";
+import AxisTop from "./AxisTop";
 
 const AnimatedAxisTop = animated(AxisTop);
 

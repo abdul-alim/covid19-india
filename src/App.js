@@ -1,14 +1,14 @@
-import React from 'react';
-import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
-import Navbar from './components/navbar';
-import Home from './components/home';
-import Helpline from './components/helplines';
-import State from './components/state';
-import './styles/styles.css';
-import ScrollToTop from './utils/scroll-top';
-import {Helmet} from 'react-helmet';
-import Analytics from 'react-router-ga';
+import Navbar from "./components/navbar";
+import Home from "./components/home";
+import Helpline from "./components/helplines";
+import State from "./components/state";
+import "./styles/styles.css";
+import ScrollToTop from "./utils/scroll-top";
+import { Helmet } from "react-helmet";
+import Analytics from "react-router-ga";
 
 function App() {
     const pages = [

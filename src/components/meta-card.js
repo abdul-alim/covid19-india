@@ -1,8 +1,8 @@
-import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/Info';
-import {PUPULATION_SOURCE} from '../constants/population';
-import {round} from '../utils/common-utils';
+import React from "react";
+import Tooltip from "@material-ui/core/Tooltip";
+import InfoIcon from "@material-ui/icons/Info";
+import { PUPULATION_SOURCE } from "../constants/population";
+import { round } from "../utils/common-utils";
 
 /**
  *

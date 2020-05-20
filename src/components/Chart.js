@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class Chart extends React.Component {
     constructor(props) {

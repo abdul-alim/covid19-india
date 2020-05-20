@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+
 const d3 = window.d3;
 var parseTime = d3.timeParse('%d/%m/%Y');
 var formatTime = d3.timeFormat('%B %d');

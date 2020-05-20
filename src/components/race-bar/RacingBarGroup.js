@@ -1,6 +1,6 @@
-import React, {forwardRef} from 'react';
-import {useTransition, animated} from 'react-spring';
-import Bar from './Bar';
+import React, { forwardRef } from "react";
+import { animated, useTransition } from "react-spring";
+import Bar from "./Bar";
 
 const AnimatedBar = animated(Bar);
 

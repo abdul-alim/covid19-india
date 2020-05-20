@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {Helmet} from 'react-helmet';
-import {STATE_CODES} from '../constants/state-code';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Helmet } from "react-helmet";
 
 /**
  *

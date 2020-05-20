@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {scaleLinear} from '@vx/scale';
-import {AxisTop as VxAxisTop} from '@vx/axis';
+import React from "react";
+import PropTypes from "prop-types";
+import { scaleLinear } from "@vx/scale";
+import { AxisTop as VxAxisTop } from "@vx/axis";
 
 const AxisTop = (props) => {
     const {domainMax, xMax} = props;

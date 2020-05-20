@@ -1,12 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
-import DisplayCard from './display-card';
-import axios from 'axios';
-import Table from './table';
-import Map from './Map';
-import {POPULATION, PUPULATION_SOURCE} from '../constants/population';
-import {getFormattedTestingData} from '../utils/format-test';
-import Chart from './Chart';
-import {dailyTrend} from '../charts/daily';
+import React, { useEffect, useRef, useState } from "react";
+import DisplayCard from "./display-card";
+import axios from "axios";
+import Table from "./table";
+import Map from "./Map";
+import { POPULATION, PUPULATION_SOURCE } from "../constants/population";
+import { getFormattedTestingData } from "../utils/format-test";
+import Chart from "./Chart";
+import { dailyTrend } from "../charts/daily";
 import {
     clone,
     IS_MOBILE_DEVICE,
@@ -15,24 +15,23 @@ import {
     shareTheApp,
     timeDifference,
     toCapitalize,
-    toFixedNumber,
-} from '../utils/common-utils';
-import TrendGraph from './trend-chart';
-import {useHistory} from 'react-router-dom';
-import {Helmet} from 'react-helmet';
-import {Button} from '@material-ui/core';
-import ShareIcon from '@material-ui/icons/Share';
-import MetaCard from './meta-card';
-import NewsCard from './news-card';
-import {makeKeyframes} from './race-bar/useKeyframes';
-import RacingBarChart from './race-bar/RacingBarChart';
-import {STATE_CODES} from '../constants/state-code';
-import {COLOR_ARRAY1, COLOR_ARRAY3} from '../constants/colors';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import PauseIcon from '@material-ui/icons/Pause';
-import ReplayIcon from '@material-ui/icons/Replay';
-import IconButton from '@material-ui/core/IconButton';
-
+    toFixedNumber
+} from "../utils/common-utils";
+import TrendGraph from "./trend-chart";
+import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { Button } from "@material-ui/core";
+import ShareIcon from "@material-ui/icons/Share";
+import MetaCard from "./meta-card";
+import NewsCard from "./news-card";
+import { makeKeyframes } from "./race-bar/useKeyframes";
+import RacingBarChart from "./race-bar/RacingBarChart";
+import { STATE_CODES } from "../constants/state-code";
+import { COLOR_ARRAY1 } from "../constants/colors";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import PauseIcon from "@material-ui/icons/Pause";
+import ReplayIcon from "@material-ui/icons/Replay";
+import IconButton from "@material-ui/core/IconButton";
 
 const d3 = window.d3;
 const IS_DESKTOP = !IS_MOBILE_DEVICE;
@@ -354,6 +353,7 @@ function Home({}) {
                     };
                 });
                 let stateCasesChart = clone(dailyChart);
+                stateCasesChart.legend.colors = COLOR_ARRAY1;
                 stateCasesChart.canvas.title.text = 'Total Confirmed Cases By States';
                 data.forEach((s, i) => {
                     stateCasesChart.seriesdata.chartdata[i] = s;
@@ -376,6 +376,7 @@ function Home({}) {
                 });
 
                 let stateCasesChartLog = clone(dailyChart);
+                stateCasesChartLog.legend.colors = COLOR_ARRAY1;
                 data.forEach((s, i) => {
                     stateCasesChartLog.seriesdata.chartdata[i] = s;
                 });

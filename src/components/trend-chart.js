@@ -1,10 +1,10 @@
-import React, {useEffect, useState, useRef} from 'react';
-import Chart from './Chart';
-import {dailyTrend} from '../charts/daily';
-import {toCapitalize} from '../utils/common-utils';
+import React, { useRef, useState } from "react";
+import Chart from "./Chart";
+import { dailyTrend } from "../charts/daily";
+import { toCapitalize } from "../utils/common-utils";
 
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 /**
  *

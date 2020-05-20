@@ -1,10 +1,10 @@
-import React, {useEffect, useImperativeHandle, useMemo, useRef, useState, useLayoutEffect} from 'react';
-import {scaleLinear, scaleBand, scaleOrdinal} from '@vx/scale';
-import {Group} from '@vx/group';
-import RacingAxisTop from './RacingAxisTop';
-import RacingBarGroup from './RacingBarGroup';
-import {getStyle} from '../../utils/common-utils';
-import {COLOR_ARRAY3} from '../../constants/colors';
+import React, { useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { scaleBand, scaleLinear, scaleOrdinal } from "@vx/scale";
+import { Group } from "@vx/group";
+import RacingAxisTop from "./RacingAxisTop";
+import RacingBarGroup from "./RacingBarGroup";
+import { getStyle } from "../../utils/common-utils";
+import { COLOR_ARRAY3 } from "../../constants/colors";
 
 const RacingBarChart = React.forwardRef(({parentRef, keyframes, categories, onStart, onStop}, ref) => {
     const [{frameIdx, animationKey, playing}, setAnimation] = useState({

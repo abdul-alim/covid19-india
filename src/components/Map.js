@@ -1,6 +1,7 @@
-import React from 'react';
-import axios from 'axios';
-import MapText from './text';
+import React from "react";
+import axios from "axios";
+import MapText from "./text";
+
 const d3 = window.d3;
 
 class Map extends React.Component {

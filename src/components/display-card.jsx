@@ -1,5 +1,5 @@
-import React, {forwardRef, useImperativeHandle, useState} from 'react';
-import Arrow from './arrow';
+import React, { forwardRef, useImperativeHandle, useState } from "react";
+import Arrow from "./arrow";
 
 const DisplayCard = forwardRef(({count, cards: cc, styles = {}, callback}, ref) => {
     let [cards, setCards] = useState(cc);
