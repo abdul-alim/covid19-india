@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 
-import { ascending, descending } from "../utils/sort";
-import Arrow from "./arrow";
+import {ascending, descending} from '../utils/sort';
+import Arrow from './arrow';
+import {numberFormatLocal} from '../utils/common-utils';
 
 /**
  *
@@ -55,7 +56,7 @@ function Table(props) {
                     ))}
                 </tr>
             </tbody>
-            <tbody className="font-bold">
+            <tbody className="">
                 {rows.map((row, index) => {
                     return (
                         <tr key={index}>
@@ -84,20 +85,22 @@ function Table(props) {
                                             </span>
                                         </Link>
                                     );
+                                } else {
+                                    count = numberFormatLocal(count);
                                 }
 
                                 return (
                                     <td
                                         key={j}
                                         className={`${
-                                            j === 0 ? 'bg-gray-200' : 'text-right'
+                                            j === 0 ? 'bg-gray-200 font-bold' : 'text-right'
                                         }  text-2xs border px-2 py-2 ${extraClass}`}
                                     >
                                         <span>
                                             {j > 0 && todayCount ? (
-                                                <span className={`text-${colorClass}-600 inline-block`}>
+                                                <span className={`text-${colorClass}-600 inline-block font-bold`}>
                                                     <Arrow up={todayCount > 0} />
-                                                    {todayCount}
+                                                    {numberFormatLocal(todayCount)}
                                                 </span>
                                             ) : (
                                                 ''

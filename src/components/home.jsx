@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import DisplayCard from "./display-card";
-import axios from "axios";
-import Table from "./table";
-import Map from "./Map";
-import { POPULATION, PUPULATION_SOURCE } from "../constants/population";
-import { getFormattedTestingData } from "../utils/format-test";
-import Chart from "./Chart";
-import { dailyTrend } from "../charts/daily";
+import React, {useEffect, useRef, useState} from 'react';
+import DisplayCard from './display-card';
+import axios from 'axios';
+import Table from './table';
+import Map from './Map';
+import {POPULATION, PUPULATION_SOURCE} from '../constants/population';
+import {getFormattedTestingData} from '../utils/format-test';
+import Chart from './Chart';
+import {dailyTrend} from '../charts/daily';
 import {
     clone,
     IS_MOBILE_DEVICE,
@@ -15,23 +15,23 @@ import {
     shareTheApp,
     timeDifference,
     toCapitalize,
-    toFixedNumber
-} from "../utils/common-utils";
-import TrendGraph from "./trend-chart";
-import { useHistory } from "react-router-dom";
-import { Helmet } from "react-helmet";
-import { Button } from "@material-ui/core";
-import ShareIcon from "@material-ui/icons/Share";
-import MetaCard from "./meta-card";
-import NewsCard from "./news-card";
-import { makeKeyframes } from "./race-bar/useKeyframes";
-import RacingBarChart from "./race-bar/RacingBarChart";
-import { STATE_CODES } from "../constants/state-code";
-import { COLOR_ARRAY1 } from "../constants/colors";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import PauseIcon from "@material-ui/icons/Pause";
-import ReplayIcon from "@material-ui/icons/Replay";
-import IconButton from "@material-ui/core/IconButton";
+    toFixedNumber,
+} from '../utils/common-utils';
+import TrendGraph from './trend-chart';
+import {useHistory} from 'react-router-dom';
+import {Helmet} from 'react-helmet';
+import {Button} from '@material-ui/core';
+import ShareIcon from '@material-ui/icons/Share';
+import MetaCard from './meta-card';
+import NewsCard from './news-card';
+import {makeKeyframes} from './race-bar/useKeyframes';
+import RacingBarChart from './race-bar/RacingBarChart';
+import {STATE_CODES} from '../constants/state-code';
+import {COLOR_ARRAY1} from '../constants/colors';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PauseIcon from '@material-ui/icons/Pause';
+import ReplayIcon from '@material-ui/icons/Replay';
+import IconButton from '@material-ui/core/IconButton';
 
 const d3 = window.d3;
 const IS_DESKTOP = !IS_MOBILE_DEVICE;
@@ -210,7 +210,9 @@ function Home({}) {
 
             // sort the st
 
-            let states = Object.values(reports.states).filter((state) => state.confirmed > 50 && state.stateCode !== 'UN');
+            let states = Object.values(reports.states).filter(
+                (state) => state.confirmed > 50 && state.stateCode !== 'UN'
+            );
 
             // set the factors
             states.forEach((state) => {
@@ -625,42 +627,11 @@ function Home({}) {
                                     <DisplayCard ref={childRef} cards={displayCards} count={2000} />
                                 </div>
 
-                                {IS_SINGLE_COLUMN && getMapAndTable()}
-
                                 <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
                                     <TrendGraph chartJson={dailyChart} history={caseHistory.india} />
                                 </div>
-    
-                                <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
-                                    <h2 className="ml-3 mt-4">Animation Of Top 10 States By Total Confirmed Cases</h2>
-                                    <h2 className="ml-3 my-0 text-sm text-gray-400 mb-2 subtitle-color">Click the play button to animate the chart</h2>
-                                    <div className="race-bar" ref={parentRef}>
-                                        <RacingBarChart
-                                          keyframes={keyframes}
-                                          onStart={() => forceUpdate(true)}
-                                          onStop={() => forceUpdate(false)}
-                                          ref={chartRef}
-                                          parentRef={parentRef}
-                                          categories={stateCodes}
-                                        />
-                                    </div>
-                                    <div style={{marginLeft: 100}} className='my-2'>
-                                        <IconButton aria-label="replay" size="small" onClick={handleReplay}>
-                                            <ReplayIcon />
-                                        </IconButton>
-                                        <IconButton onClick={playing ? handleStop : handleStart} size="small">
-                                            {playing ? <PauseIcon /> : <PlayArrowIcon />}
-                                        </IconButton>
-                                    </div>
-                                </div>
 
-                                <div className="w-full fade-in" style={animationDelay(3)}>
-                                    <MetaCard
-                                        history={caseHistory.india}
-                                        tests={metaCardPopulation}
-                                        report={{...mapInitData}}
-                                    />
-                                </div>
+                                {IS_SINGLE_COLUMN && getMapAndTable()}
 
                                 <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(4)}>
                                     <Chart seriesData={stateCases} name="state_cases" callback={chartCallback} />
@@ -680,10 +651,43 @@ function Home({}) {
                                 <div className="w-full fade-in md:w-40 mb-4 state-bar border" style={animationDelay(7)}>
                                     <Chart seriesData={wordcloudChart} name="wordcloud" callback={chartCallback} />
                                 </div>
+
+                                <div className="w-full fade-in mb-4 border" style={animationDelay(2)}>
+                                    <h2 className="ml-3 mt-4">Animation Of Top 10 States By Total Confirmed Cases</h2>
+                                    <h2 className="ml-3 my-0 text-sm text-gray-400 mb-2 subtitle-color">
+                                        Click the play button to animate the chart
+                                    </h2>
+                                    <div className="race-bar" ref={parentRef}>
+                                        <RacingBarChart
+                                            keyframes={keyframes}
+                                            onStart={() => forceUpdate(true)}
+                                            onStop={() => forceUpdate(false)}
+                                            ref={chartRef}
+                                            parentRef={parentRef}
+                                            categories={stateCodes}
+                                        />
+                                    </div>
+                                    <div style={{marginLeft: 100}} className="my-2">
+                                        <IconButton aria-label="replay" size="small" onClick={handleReplay}>
+                                            <ReplayIcon />
+                                        </IconButton>
+                                        <IconButton onClick={playing ? handleStop : handleStart} size="small">
+                                            {playing ? <PauseIcon /> : <PlayArrowIcon />}
+                                        </IconButton>
+                                    </div>
+                                </div>
+
+                                <div className="w-full fade-in" style={animationDelay(3)}>
+                                    <MetaCard
+                                        history={caseHistory.india}
+                                        tests={metaCardPopulation}
+                                        report={{...mapInitData}}
+                                    />
+                                </div>
                             </div>
                             <div className="w-full md:w-40 md:mx-10">
                                 {!IS_SINGLE_COLUMN && getMapAndTable()}
-    
+
                                 <div className="w-full md:w-40 mb-4 state-bar border fade-in" style={animationDelay(9)}>
                                     <Chart seriesData={stateStackedChart} name="stacked" callback={chartCallback} />
                                 </div>

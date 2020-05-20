@@ -2,7 +2,7 @@ import React from "react";
 import Tooltip from "@material-ui/core/Tooltip";
 import InfoIcon from "@material-ui/icons/Info";
 import { PUPULATION_SOURCE } from "../constants/population";
-import { round } from "../utils/common-utils";
+import { numberFormatLocal, round } from "../utils/common-utils";
 
 /**
  *
@@ -14,17 +14,17 @@ const NaNCheck = (d) => {
     if (isNaN(d)) {
         return 0;
     }
-    return d;
+    return numberFormatLocal(d);
 };
 
 function MetaCard({report, tests, history}) {
     let {populationNumeric: population} = tests;
 
-    let confirmedPerMillion = NaNCheck(round((report.confirmed / population) * 1000000, 2));
+    let confirmedPerMillion = NaNCheck(round((report.confirmed / population) * 1000000));
     let activePercent = NaNCheck(round((report.active / report.confirmed) * 100, 2));
     let recoveredPercent = NaNCheck(round((report.recovered / report.confirmed) * 100, 2));
     let deathPercent = NaNCheck(round((report.dead / report.confirmed) * 100, 2));
-    let testPerMillion = NaNCheck(round((tests.testedNumeric / population) * 1000000, 2));
+    let testPerMillion = NaNCheck(round((tests.testedNumeric / population) * 1000000));
 
     // add a sum for total confirmed
     let last = 0;
@@ -96,7 +96,7 @@ function MetaCard({report, tests, history}) {
             title: 'Tests Per Million',
             info: '(total tests / total population) * 1 Million',
             report: `~${testPerMillion}`,
-            description: `For every 1 million people in ${report.name}, ~${round(testPerMillion)} people were tested.`,
+            description: `For every 1 million people in ${report.name}, ~${testPerMillion} people were tested.`,
             cardColor: 'blue',
         },
     ];

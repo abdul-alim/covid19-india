@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import {numberFormatLocal} from './common-utils';
 
 const d3 = window.d3;
 var parseTime = d3.timeParse('%d/%m/%Y');
@@ -27,10 +28,10 @@ export function getFormattedTestingData(testing_data, totalPopulation, label) {
     return {
         populationNumeric: totalPopulation,
         testedNumeric: testing_data.tested,
-        tested: testing_data.tested.toLocaleString(),
+        tested: numberFormatLocal(testing_data.tested),
         date: dateString,
-        population: totalPopulation.toLocaleString(),
-        test_per_million: Math.round((testing_data.tested / totalPopulation) * 1000000).toLocaleString(),
+        population: numberFormatLocal(totalPopulation),
+        test_per_million: numberFormatLocal(Math.round((testing_data.tested / totalPopulation) * 1000000)),
         label: ` - ${label}`,
     };
 }

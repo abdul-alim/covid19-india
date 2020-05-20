@@ -163,3 +163,7 @@ export function getStyle(el, prop, convertToInt = true) {
     }
     return style;
 }
+
+export function numberFormatLocal(number) {
+    return number.toLocaleString('en-IN');
+}

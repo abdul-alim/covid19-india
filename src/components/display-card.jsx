@@ -1,5 +1,6 @@
-import React, { forwardRef, useImperativeHandle, useState } from "react";
-import Arrow from "./arrow";
+import React, {forwardRef, useImperativeHandle, useState} from 'react';
+import Arrow from './arrow';
+import { numberFormatLocal } from "../utils/common-utils";
 
 const DisplayCard = forwardRef(({count, cards: cc, styles = {}, callback}, ref) => {
     let [cards, setCards] = useState(cc);
@@ -20,7 +21,6 @@ const DisplayCard = forwardRef(({count, cards: cc, styles = {}, callback}, ref) 
         <div className="flex flex-row justify-center my-5 justify-between">
             {cards.map((card, i) => {
                 let bg100, bg200, shadow, flexAuto;
-
 
                 if (styles.bg !== false || card.name === activeCard) {
                     bg100 = `bg-${card.colorClass}-100`;
@@ -54,10 +54,10 @@ const DisplayCard = forwardRef(({count, cards: cc, styles = {}, callback}, ref) 
                             {
                                 <span className="text-xs">
                                     {card.delta ? <Arrow up={card.delta >= 0} /> : ''}
-                                    {card.delta}
+                                    {numberFormatLocal(card.delta)}
                                 </span>
                             }
-                            <span className="text-xl lg:text-2xl py-1">{card.value + ''}</span>
+                            <span className="text-xl py-1">{numberFormatLocal(card.value)}</span>
                         </div>
                         <div className={`py-2 w-full ${bg200} text-sm font-semibold`}>
                             <span className="capitalize">{card.name}</span>
