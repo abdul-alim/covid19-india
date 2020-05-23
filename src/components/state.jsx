@@ -1,19 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import DisplayCard from "./display-card";
-import axios from "axios";
-import Table from "./table";
-import Map from "./Map";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { STATE_CODES } from "../constants/state-code";
-import { POPULATION, PUPULATION_SOURCE } from "../constants/population.js";
-import { getFormattedTestingData } from "../utils/format-test";
-import TrendGraph from "./trend-chart";
-import { IS_MOBILE_DEVICE, shareTheApp, timeDifference } from "../utils/common-utils";
-import Chart from "./Chart";
-import { Helmet } from "react-helmet";
-import { Button } from "@material-ui/core";
-import ShareIcon from "@material-ui/icons/Share";
-import MetaCard from "./meta-card";
+import React, {useEffect, useRef, useState} from 'react';
+import DisplayCard from './display-card';
+import axios from 'axios';
+import Table from './table';
+import Map from './Map';
+import {Link, useHistory, useParams} from 'react-router-dom';
+import {STATE_CODES} from '../constants/state-code';
+import {POPULATION, PUPULATION_SOURCE} from '../constants/population.js';
+import {getFormattedTestingData} from '../utils/format-test';
+import TrendGraph from './trend-chart';
+import {animationDelay, clone, IS_MOBILE_DEVICE, shareTheApp, timeDifference} from '../utils/common-utils';
+import Chart from './Chart';
+import {Helmet} from 'react-helmet';
+import {Button} from '@material-ui/core';
+import ShareIcon from '@material-ui/icons/Share';
+import MetaCard from './meta-card';
+import {dailyTrend} from '../charts/daily';
 
 const d3 = window.d3;
 
@@ -69,6 +70,7 @@ function State({}) {
     const [displayCards, setDisplayCards] = useState(getCards());
     const [districtData, setDistrictData] = useState([]);
     const [dailyChart, setDailyChart] = useState(null);
+    const [wordcloudChart, setWordcloudChart] = useState(null);
     const [caseHistory, setCaseHistory] = useState(null);
     const [chartStore, updateChartStore] = useState({});
     const [percentChart, setPercentChart] = useState({});
@@ -92,6 +94,7 @@ function State({}) {
                 {data: dailyChart},
                 {data: percentChartJson},
                 {data: tests},
+                {data: stateBar},
             ] = await Promise.all([
                 axios.get('https://api.track-covid19.in/district_v2.json'),
                 axios.get('https://api.track-covid19.in/reports_v2.json'),
@@ -100,6 +103,7 @@ function State({}) {
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/percent-chart.json'),
                 axios.get('https://api.track-covid19.in/tests.json'),
+                axios.get('/charts/states.json'),
             ]);
 
             // hide spinner
@@ -162,17 +166,17 @@ function State({}) {
                     today.active = today.confirmed - today.recovered - today.dead;
                 }
             }
-            
+
             setDisplayCards(getCards(stateInfo, stateInfo.today));
             setDistrictData(districtInfo.districts);
 
             let mapInitData = {
-                confirmed: districtInfo.confirmed,
-                active: districtInfo.active,
-                recovered: districtInfo.recovered,
-                dead: districtInfo.dead,
-                name: districtInfo.state,
-                today: districtInfo.today,
+                confirmed: stateInfo.confirmed,
+                active: stateInfo.active,
+                recovered: stateInfo.recovered,
+                dead: stateInfo.dead,
+                name: stateInfo.name,
+                today: stateInfo.today,
             };
             setMapInitData(mapInitData);
 
@@ -222,8 +226,33 @@ function State({}) {
                 }
             }
 
-            let zoneV2 = zonesV2[stateCode].map((row) => [row.district, `${row.zone} Zone`]);
+            {
+                let districts = districtInfo.districts.filter((district) => district.confirmed > 0);
 
+                if (districts.length > 4) {
+                    let wordcloudSeries = dailyTrend(Object.values(districts), 'district', ['confirmed']),
+                        wordCloudChart = clone(stateBar);
+
+                    wordCloudChart.canvas.title.text = 'Word Cloud of Affected Districts';
+                    wordCloudChart.chart.axes.yaxis[0].label.text = 'Total';
+                    wordCloudChart.seriesdata.chartdata[0] = {
+                        type: 'wordcloud',
+                        data: wordcloudSeries,
+                        seriesname: 'Confirmed',
+                    };
+                    wordCloudChart.legend.colors = ['#E91E63'];
+                    wordCloudChart.legend.enabled = false;
+                    wordCloudChart.chart.plot.plotoptions.wordcloud = {
+                        minSize: '2.5%',
+                        legendHighlightEffect: {
+                            selectedSeries: 'invert',
+                        },
+                    };
+                    setWordcloudChart(wordCloudChart);
+                }
+            }
+
+            let zoneV2 = zonesV2[stateCode].map((row) => [row.district, `${row.zone} Zone`]);
             setZones(zoneV2);
 
             setFetched(true);
@@ -349,15 +378,28 @@ function State({}) {
                                             zones={zones}
                                         />
                                     </div>
-                                    <div className="w-full fade-in">
+                                    <div className="w-full fade-in" style={animationDelay(4)}>
                                         <MetaCard history={caseHistory} tests={testingData} report={mapInitData} />
                                     </div>
 
-                                    <div className="w-full border my-6">
+                                    <div className="w-full border fade-in my-6" >
                                         {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
                                     </div>
 
-                                    <div className="w-full border my-6" style={{height: '400px'}}>
+                                    {wordcloudChart && (
+                                        <div
+                                            className="w-full fade-in md:w-40 mb-4 state-bar border"
+                                            style={animationDelay(5)}
+                                        >
+                                            <Chart
+                                                seriesData={wordcloudChart}
+                                                name="wordcloud"
+                                                callback={chartCallback}
+                                            />
+                                        </div>
+                                    )}
+
+                                    <div className="w-full border my-6 fade-in" style={{height: '300px'}}>
                                         <Chart seriesData={percentChart} name="percent" callback={chartCallback} />
                                     </div>
                                 </div>

@@ -164,6 +164,13 @@ export function getStyle(el, prop, convertToInt = true) {
     return style;
 }
 
+export function animationDelay(i) {
+    return {animationDelay: i * 200 + 'ms'};
+}
+
 export function numberFormatLocal(number) {
-    return number.toLocaleString('en-IN');
+    if (typeof number === 'number') {
+        return number.toLocaleString('en-IN');
+    }
+    return number;
 }

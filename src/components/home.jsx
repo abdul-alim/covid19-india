@@ -16,6 +16,7 @@ import {
     timeDifference,
     toCapitalize,
     toFixedNumber,
+    animationDelay
 } from '../utils/common-utils';
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
@@ -508,10 +509,8 @@ function Home({}) {
         chartStore[name] = chart;
         updateChartStore(chartStore);
     }
-
-    function animationDelay(i) {
-        return {animationDelay: i * 200 + 'ms'};
-    }
+    
+    
 
     function getMapAndTable() {
         return (
