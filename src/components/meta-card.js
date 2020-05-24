@@ -36,7 +36,7 @@ function MetaCard({report, tests, history}) {
     let growRatePerWeek = 0,
         growthDateRange = 0;
 
-    if (history.length) {
+    if (history.length > 2) {
         let lastWeek = history[history.length - 8],
             yesterday = history[history.length - 2];
 

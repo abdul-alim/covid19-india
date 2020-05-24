@@ -612,6 +612,11 @@ img {
     margin-bottom: 2rem;
 }
 
+.my-10 {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
 .mx-auto {
     margin-left: auto;
     margin-right: auto;

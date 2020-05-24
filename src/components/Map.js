@@ -213,7 +213,7 @@ class Map extends React.Component {
                 />
                 <div className="live-map my-6" ref={(c) => (this.myDiv = c)}></div>
                 {this.props.zones && (
-                    <div className="my-4 text-sm">
+                    <div className="my-4 text-sm hidden">
                         <button
                             className="bg-gray-300 px-4 py-3 font-bold text-primary"
                             name="default"

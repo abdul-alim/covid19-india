@@ -153,7 +153,9 @@ function State({}) {
                     dead: stateInfo.dead - totalKnownDeaths,
                 };
                 unknowns.active = unknowns.confirmed - unknowns.recovered - unknowns.dead;
-                districts.push(unknowns);
+                if (unknowns.confirmed || unknowns.recovered || unknowns.dead) {
+                    districts.push(unknowns);
+                }
                 districtInfo.districts = districts;
             }
 
@@ -230,7 +232,8 @@ function State({}) {
                 let districts = districtInfo.districts.filter((district) => district.confirmed > 0);
 
                 if (districts.length > 4) {
-                    let wordcloudSeries = dailyTrend(Object.values(districts), 'district', ['confirmed']),
+                    let dd = districts.filter(d => d.district !== 'Unknown')
+                    let wordcloudSeries = dailyTrend(Object.values(dd), 'district', ['confirmed']),
                         wordCloudChart = clone(stateBar);
 
                     wordCloudChart.canvas.title.text = 'Word Cloud of Affected Districts';
@@ -244,6 +247,7 @@ function State({}) {
                     wordCloudChart.legend.enabled = false;
                     wordCloudChart.chart.plot.plotoptions.wordcloud = {
                         minSize: '2.5%',
+                        maxSize: '15%',
                         legendHighlightEffect: {
                             selectedSeries: 'invert',
                         },
@@ -293,7 +297,7 @@ function State({}) {
                     </div>
                 )}
                 {fetched && (
-                    <div className="opacity-0 my-6 fade-in">
+                    <div className="opacity-0 my-12 fade-in">
                         <div className="flex flex-wrap justify-center">
                             <div className="w-full md:w-40 md:mx-10 pb-4">
                                 <div className="w-full md:w-40 font-bold cursor-pointer flex pb-6 text-xs text-gray-600 items-center">
@@ -338,8 +342,12 @@ function State({}) {
                                 <div className="w-full fade-in">
                                     <DisplayCard ref={childRef} cards={displayCards} count={2000} />
                                 </div>
-                                <div className={`w-full my-6 ${fetched ? 'fade-in anim-delay-1' : ''}`}>
+                                <div className={`w-full my-10 ${fetched ? 'fade-in anim-delay-1' : ''}`}>
                                     <Table rows={tableData.rows} columns={tableData.columns} />
+                                </div>
+
+                                <div className="w-full fade-in my-8" style={animationDelay(4)}>
+                                    <MetaCard history={caseHistory} tests={testingData} report={mapInitData} />
                                 </div>
                             </div>
                             <div className="w-full md:w-40 md:mx-10 pb-4">
@@ -378,11 +386,8 @@ function State({}) {
                                             zones={zones}
                                         />
                                     </div>
-                                    <div className="w-full fade-in" style={animationDelay(4)}>
-                                        <MetaCard history={caseHistory} tests={testingData} report={mapInitData} />
-                                    </div>
 
-                                    <div className="w-full border fade-in my-6" >
+                                    <div className="w-full border fade-in my-6">
                                         {dailyChart && <TrendGraph chartJson={dailyChart} history={caseHistory} />}
                                     </div>
 

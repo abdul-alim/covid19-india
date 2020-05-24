@@ -422,6 +422,7 @@ function Home({}) {
                 wordCloudChart.legend.enabled = false;
                 wordCloudChart.chart.plot.plotoptions.wordcloud = {
                     minSize: '2.5%',
+                    maxSize: '15%',
                     legendHighlightEffect: {
                         selectedSeries: 'invert',
                     },
