@@ -217,22 +217,23 @@ function State({}) {
             {
                 percentChartJson.seriesdata.chartdata[0] = {
                     type: 'pie',
-                    data: [
-                        ['Active', stateInfo.active],
-                        ['Recovered', stateInfo.recovered],
-                        ['Dead', stateInfo.dead],
-                    ],
+                    data:
+                        stateInfo.confirmed > 0
+                            ? [
+                                  ['Active', stateInfo.active],
+                                  ['Recovered', stateInfo.recovered],
+                                  ['Dead', stateInfo.dead],
+                              ]
+                            : [],
                 };
-                if (stateInfo.confirmed > 0) {
-                    setPercentChart(percentChartJson);
-                }
+                setPercentChart(percentChartJson);
             }
 
             {
                 let districts = districtInfo.districts.filter((district) => district.confirmed > 0);
 
                 if (districts.length > 4) {
-                    let dd = districts.filter(d => d.district !== 'Unknown')
+                    let dd = districts.filter((d) => d.district !== 'Unknown');
                     let wordcloudSeries = dailyTrend(Object.values(dd), 'district', ['confirmed']),
                         wordCloudChart = clone(stateBar);
 
