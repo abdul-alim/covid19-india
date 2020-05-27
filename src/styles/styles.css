@@ -261,6 +261,10 @@ img {
     appearance: none;
 }
 
+.bg-black-300 {
+    background-color: #333;
+}
+
 .bg-white {
     background-color: #fff;
 }

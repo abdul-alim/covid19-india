@@ -16,7 +16,7 @@ import {
     timeDifference,
     toCapitalize,
     toFixedNumber,
-    animationDelay
+    animationDelay,
 } from '../utils/common-utils';
 import TrendGraph from './trend-chart';
 import {useHistory} from 'react-router-dom';
@@ -33,6 +33,8 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import ReplayIcon from '@material-ui/icons/Replay';
 import IconButton from '@material-ui/core/IconButton';
+import Footer from './footer';
+import SocialCard from './social';
 
 const d3 = window.d3;
 const IS_DESKTOP = !IS_MOBILE_DEVICE;
@@ -510,8 +512,6 @@ function Home({}) {
         chartStore[name] = chart;
         updateChartStore(chartStore);
     }
-    
-    
 
     function getMapAndTable() {
         return (
@@ -604,6 +604,9 @@ function Home({}) {
                     <div className="opacity-0 my-8 fade-in">
                         <div className="flex flex-wrap justify-center">
                             <div className="w-full md:w-40 md:mx-10 pb-4">
+                                <div className="flex justify-between font-bold items-center my-4">
+                                    <SocialCard github={true} />
+                                </div>
                                 <div className="flex justify-between text-primary font-bold items-center my-2">
                                     <div className="flex">
                                         <Button
@@ -731,6 +734,7 @@ function Home({}) {
                                 <NewsCard articles={articles.news.articles} />
                             </div>
                         </div>
+                        <Footer />
                     </div>
                 )}
             </div>

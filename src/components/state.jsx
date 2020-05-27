@@ -15,6 +15,7 @@ import {Button} from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
 import MetaCard from './meta-card';
 import {dailyTrend} from '../charts/daily';
+import Footer from './footer';
 
 const d3 = window.d3;
 
@@ -411,6 +412,7 @@ function State({}) {
                                 </div>
                             </div>
                         </div>
+                        <Footer />
                     </div>
                 )}
             </div>
