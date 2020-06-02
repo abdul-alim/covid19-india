@@ -67,10 +67,10 @@
                 "threshold": {
                     "line": {
                         "show": true,
-                        "values": [1584988200000, 1586802600000, 1588530600000, 1589740200000],
+                        "values": [1584988200000, 1586802600000, 1588530600000, 1589740200000, 1590949800000],
                         "color": "#9C27B0",
                         "label": {
-                            "text": ["Lockdown 1", "Lockdown 2", "Lockdown 3", "Lockdown 4"],
+                            "text": ["Lockdown 1", "Lockdown 2", "Lockdown 3", "Lockdown 4", "Lockdown 5"],
                             "hAlign": "center",
                             "fontSize": "10",
                             "fontColor": "#673AB7",
