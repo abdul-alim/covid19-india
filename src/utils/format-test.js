@@ -18,7 +18,7 @@ export function getFormattedTestingData(testing_data, totalPopulation, label) {
 
     dateString = (
         <div className="text-xs">
-            {label === 'Total' ? 'As per latest IMCR ' : `Till ${formatTime(parseTime(testing_data.date))} as per `}
+            {label === 'Total' ? 'As per latest ICMR ' : `Till ${formatTime(parseTime(testing_data.date))} as per `}
             <a href={testing_data.source} rel="noopener" className="bg-blue-100" target="_blank">
                 {label === 'Total' ? 'Report' : 'source'}
             </a>
