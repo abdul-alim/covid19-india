@@ -91,7 +91,7 @@ function State({}) {
                 {
                     data: {state: history},
                 },
-                {data: zonesV2},
+                // {data: zonesV2},
                 {data: dailyChart},
                 {data: percentChartJson},
                 {data: tests},
@@ -100,7 +100,7 @@ function State({}) {
                 axios.get('https://api.track-covid19.in/district_v2.json'),
                 axios.get('https://api.track-covid19.in/reports_v2.json'),
                 axios.get('https://api.track-covid19.in/history.json'),
-                axios.get('https://api.track-covid19.in/zones.json'),
+                // axios.get('https://api.track-covid19.in/zones.json'),
                 axios.get('/charts/daily.json'),
                 axios.get('/charts/percent-chart.json'),
                 axios.get('https://api.track-covid19.in/tests.json'),
@@ -258,8 +258,8 @@ function State({}) {
                 }
             }
 
-            let zoneV2 = zonesV2[stateCode].map((row) => [row.district, `${row.zone} Zone`]);
-            setZones(zoneV2);
+            // let zoneV2 = zonesV2[stateCode].map((row) => [row.district, `${row.zone} Zone`]);
+            // setZones(zoneV2);
 
             setFetched(true);
         } catch (err) {

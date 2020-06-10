@@ -48,12 +48,12 @@ class Map extends React.Component {
             object_map[row[joinBy]] = row;
         });
 
-        let zoneMap = {};
-        if (zones) {
-            zones.forEach((row) => {
-                zoneMap[row[0]] = row[1];
-            });
-        }
+        // let zoneMap = {};
+        // if (zones) {
+        //     zones.forEach((row) => {
+        //         zoneMap[row[0]] = row[1];
+        //     });
+        // }
 
         const [{data: toposjon}, {data: mapData}] = await Promise.all([
             axios.get(`/maps/${stateCode}.topojson`),
@@ -75,9 +75,9 @@ class Map extends React.Component {
             }
             availableNames.push(name_ascii);
             let zone = null;
-            if (zones) {
-                zone = zoneMap[name_ascii];
-            }
+            // if (zones) {
+            //     zone = zoneMap[name_ascii];
+            // }
             return [name_ascii, confirmed, active, recovered, dead, zone];
         });
 
@@ -90,13 +90,13 @@ class Map extends React.Component {
 
         console.log('*****************************');
 
-        if (zones) {
-            zones.forEach((district) => {
-                if (!availableNames.includes(district[0])) {
-                    console.log('zone mitchmatch', district[0]);
-                }
-            });
-        }
+        // if (zones) {
+        //     zones.forEach((district) => {
+        //         if (!availableNames.includes(district[0])) {
+        //             console.log('zone mitchmatch', district[0]);
+        //         }
+        //     });
+        // }
 
         if (this.myDiv) {
             this.myDiv.classList.add('fade-in');
