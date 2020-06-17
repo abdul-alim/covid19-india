@@ -1,9 +1,14 @@
 <p align="center">
+  View our live dashboard <a href="https://www.track-covid19.in/">here</a>.
+ </p>
+ 
+<p align="center">
 <img src="https://www.track-covid19.in/thumbnail.png" width="100%">
 </p>
 
-<p align="center">
-  View our live dashboard <a href="https://www.track-covid19.in/">here</a>.
+ 
+ <p align="center">
+  Live Free COVID-19 India Database <a href="https://api.track-covid19.in">https://api.track-covid19.in</a>.
  </p>
 
 ## Setup
