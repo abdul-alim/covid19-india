@@ -1,8 +1,8 @@
-import React from "react";
-import Tooltip from "@material-ui/core/Tooltip";
-import InfoIcon from "@material-ui/icons/Info";
-import { PUPULATION_SOURCE } from "../constants/population";
-import { numberFormatLocal, round } from "../utils/common-utils";
+import React from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoIcon from '@material-ui/icons/Info';
+import {PUPULATION_SOURCE} from '../constants/population';
+import {numberFormatLocal, round} from '../utils/common-utils';
 
 /**
  *
@@ -50,15 +50,13 @@ function MetaCard({report, tests, history}) {
         growthDateRange = `${lastWeek.date.split(',')[0]} - ${yesterday.date.split(',')[0]}`;
     }
     // const doublingRate = growthRate > 0 ? 70 / round(growthRate, 2) : 0;
-
+    
     let cards = [
         {
             title: 'Confirmed Per Million',
             info: '(confirmed / state population) * 1 Million',
             report: confirmedPerMillion,
-            description: `~${round(confirmedPerMillion)} out of every 1 million people in ${
-                report.name
-            } have tested positive for the virus.`,
+            description: `~${confirmedPerMillion} out of every 1 million people in ${report.name} have tested positive for the virus.`,
             cardColor: 'red',
         },
         {
@@ -107,7 +105,13 @@ function MetaCard({report, tests, history}) {
                 <div className="text-gray-700 font-bold">
                     <h2 className="text-sm">
                         Population{' '}
-                        <a rel="noopener" target="_blank" className="text-blue-600" href={PUPULATION_SOURCE}>
+                        <a
+                            rel="noopener"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600"
+                            href={PUPULATION_SOURCE}
+                        >
                             2019
                         </a>
                     </h2>
