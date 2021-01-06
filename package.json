@@ -11,7 +11,7 @@
         "react-scripts": "^3.4.1",
         "react-router-dom": "^5.1.2",
         "react-router-transition": "^2.0.0",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "react-helmet": "^6.0.0",
         "react-router-ga": "^1.2.3",
         "react-burger-menu": "^2.6.13",
