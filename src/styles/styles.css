@@ -986,11 +986,11 @@ img {
 }
 
 .text-2xs {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
 }
 
 .text-sm {
-    font-size: 0.875rem;
+    font-size: 0.7rem;
 }
 
 .text-base {
@@ -1002,7 +1002,7 @@ img {
 }
 
 .text-xl {
-    font-size: 1.25rem;
+    font-size: .9rem;
 }
 
 .text-2xl {
@@ -1183,6 +1183,27 @@ img {
     .md\:text-2xl {
         font-size: 1.5rem;
     }
+
+    .text-xl {
+        font-size: 1.25rem;
+    }
+
+    .text-2xs {
+        font-size: 0.7rem;
+    }
+
+    .text-sm {
+        font-size: 0.875rem;
+    }
+
+    .text-base {
+        font-size: 1rem;
+    }
+
+    .text-lg {
+        font-size: 1.125rem;
+    }
+
 }
 
 @media (min-width: 1024px) {

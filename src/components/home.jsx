@@ -102,9 +102,31 @@ function Home({}) {
             getData();
         }
     }, [fetched]);
+    
+    async function fetchData(URL) {
+        return axios
+          .get(URL)
+          .then(async function(response) {
+              return response
+          })
+          .catch(function(error) {
+              return { success: false, data: null };
+          });
+    }
 
     const getData = async () => {
         try {
+            
+            let urls = [
+                'https://api.track-covid19.in/reports_v2.json',
+                'https://api.track-covid19.in/history.json',
+                '/charts/daily.json',
+                '/charts/states.json',
+                '/charts/percent-chart.json',
+                'https://jsonstorage.net/api/items/72baa701-75d5-4069-89f3-573c4a4bb3e3',
+                'https://api.track-covid19.in/tests.json'
+            ]
+            
             let [
                 {data: reports},
                 {
@@ -115,15 +137,18 @@ function Home({}) {
                 {data: percentChartJson},
                 {data: news},
                 {data: tests},
-            ] = await Promise.all([
-                axios.get('https://api.track-covid19.in/reports_v2.json'),
-                axios.get('https://api.track-covid19.in/history.json'),
-                axios.get('/charts/daily.json'),
-                axios.get('/charts/states.json'),
-                axios.get('/charts/percent-chart.json'),
-                axios.get('https://jsonstorage.net/api/items/72baa701-75d5-4069-89f3-573c4a4bb3e3'),
-                axios.get('https://api.track-covid19.in/tests.json'),
-            ]);
+            ] = await Promise.all(urls.map(fetchData));
+    
+            if (!news) {
+                news = {
+                    headlines :{
+                        articles:[]
+                    },
+                    news: {
+                        articles: []
+                    }
+                }
+            }
 
             setSpinner(false);
             setData(reports);
