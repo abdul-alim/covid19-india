@@ -13,7 +13,7 @@
         "@vx/scale": "0.0.192",
         "@vx/shape": "0.0.192",
         "@vx/text": "0.0.192",
-        "axios": "^0.21.1",
+        "axios": "^1.6.0",
         "react": "^16.13.1",
         "react-burger-menu": "^2.6.13",
         "react-dom": "^16.13.1",
